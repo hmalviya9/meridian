@@ -1,0 +1,41 @@
+{
+  "name": "經絡 · Meridian — TCM Nap Clock",
+  "short_name": "Meridian",
+  "description": "A meditative timekeeper pairing the Traditional Chinese Medicine organ clock with Yoga Nidra micro-naps.",
+  "id": "/meridian/",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#0c0b11",
+  "theme_color": "#0c0b11",
+  "orientation": "portrait",
+  "lang": "en",
+  "categories": ["health", "lifestyle", "wellness"],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

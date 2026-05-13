@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="62%">
+      <stop offset="0%" stop-color="#1a1722"/>
+      <stop offset="60%" stop-color="#0c0b11"/>
+      <stop offset="100%" stop-color="#08070c"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="38%" r="40%">
+      <stop offset="0%" stop-color="#d65843" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#d65843" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="bead-glow" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <rect width="512" height="512" fill="url(#glow)"/>
+
+  <!-- Clock group centered -->
+  <g transform="translate(256 256)">
+    <!-- Outer ring -->
+    <circle r="200" fill="none" stroke="#ede4cd" stroke-opacity="0.12" stroke-width="1"/>
+    <circle r="180" fill="none" stroke="#ede4cd" stroke-opacity="0.18" stroke-width="1"/>
+    <circle r="120" fill="none" stroke="#ede4cd" stroke-opacity="0.18" stroke-width="1"/>
+
+    <!-- 12 segment dividers -->
+    <g stroke="#ede4cd" stroke-opacity="0.18" stroke-width="0.8">
+      <line x1="0" y1="-180" x2="0" y2="-120"/>
+      <line x1="90" y1="-155.88" x2="60" y2="-103.92" transform="rotate(0)"/>
+      <line x1="155.88" y1="-90" x2="103.92" y2="-60"/>
+      <line x1="180" y1="0" x2="120" y2="0"/>
+      <line x1="155.88" y1="90" x2="103.92" y2="60"/>
+      <line x1="90" y1="155.88" x2="60" y2="103.92"/>
+      <line x1="0" y1="180" x2="0" y2="120"/>
+      <line x1="-90" y1="155.88" x2="-60" y2="103.92"/>
+      <line x1="-155.88" y1="90" x2="-103.92" y2="60"/>
+      <line x1="-180" y1="0" x2="-120" y2="0"/>
+      <line x1="-155.88" y1="-90" x2="-103.92" y2="-60"/>
+      <line x1="-90" y1="-155.88" x2="-60" y2="-103.92"/>
+    </g>
+
+    <!-- Hour ticks on inner ring (24) -->
+    <g stroke="#ede4cd" stroke-opacity="0.4" stroke-width="0.8">
+      <line x1="0" y1="-115" x2="0" y2="-108"/>
+      <line x1="29.78" y1="-111.08" x2="27.96" y2="-104.32" transform="rotate(15)"/>
+    </g>
+
+    <!-- Active segment glow (Heart at noon-ish, just for the icon visual) -->
+    <path d="M 0 -180 A 180 180 0 0 1 90 -155.88 L 60 -103.92 A 120 120 0 0 0 0 -120 Z"
+          fill="#d65843" fill-opacity="0.15" stroke="#d65843" stroke-opacity="0.6" stroke-width="1"/>
+
+    <!-- Center disc -->
+    <circle r="58" fill="#0c0b11" stroke="#ede4cd" stroke-opacity="0.18" stroke-width="0.8"/>
+
+    <!-- Center character 經 -->
+    <text x="0" y="14" text-anchor="middle"
+          font-family="'Noto Serif SC', 'Songti SC', 'STSong', serif"
+          font-size="60" font-weight="500" fill="#ede4cd" fill-opacity="0.92">經</text>
+
+    <!-- Hand pointing to ~noon position -->
+    <g transform="rotate(45)">
+      <line x1="0" y1="-58" x2="0" y2="-155" stroke="#ede4cd" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="0" cy="-155" r="6" fill="#d65843" filter="url(#bead-glow)" opacity="0.6"/>
+      <circle cx="0" cy="-155" r="4" fill="#d65843"/>
+      <circle cx="0" cy="0" r="3" fill="#ede4cd"/>
+    </g>
+  </g>
+</svg>

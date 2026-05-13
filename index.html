@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>經絡 · Meridian — A TCM Nap Clock</title>
+
+<!-- PWA -->
+<meta name="theme-color" content="#0c0b11">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Meridian">
+<meta name="description" content="A meditative timekeeper pairing the TCM organ clock with Yoga Nidra micro-naps.">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/svg+xml" href="./icon.svg">
+<link rel="apple-touch-icon" href="./icon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,300;1,400;1,500&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+<style>
+:root {
+  --ink: #0c0b11;
+  --ink-2: #14121c;
+  --cream: #ede4cd;
+  --cream-dim: rgba(237,228,205,0.62);
+  --cream-faint: rgba(237,228,205,0.18);
+  --cream-ghost: rgba(237,228,205,0.08);
+  --element: #ede4cd;
+  --element-soft: rgba(237,228,205,0.5);
+  --element-glow: rgba(237,228,205,0.12);
+
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body: 'Fraunces', serif;
+  --font-cn: 'Noto Serif SC', serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, var(--element-glow), transparent 60%),
+    radial-gradient(ellipse at center, rgba(237,228,205,0.025), transparent 70%),
+    linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%);
+  background-attachment: fixed;
+  transition: background 3.5s ease;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Grain texture overlay */
+.grain {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.vignette {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%);
+  z-index: 1;
+}
+
+/* HEADER */
+header {
+  position: relative; z-index: 5;
+  padding: 36px 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+.brand .cn {
+  font-family: var(--font-cn);
+  font-size: 19px;
+  letter-spacing: 0.1em;
+  color: var(--cream);
+  font-weight: 500;
+}
+.brand .en {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0.36em;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+}
+
+.live-time {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  color: var(--cream-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* MAIN */
+main {
+  position: relative; z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px 60px;
+  gap: 44px;
+}
+
+.clock-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 1;
+}
+
+.clock {
+  width: 100%; height: 100%;
+  overflow: visible;
+}
+
+.segment {
+  fill: var(--cream);
+  fill-opacity: 0.018;
+  stroke: var(--cream-faint);
+  stroke-width: 0.4;
+  transition: fill-opacity 2s ease, stroke 2s ease;
+}
+.segment.active {
+  fill: var(--element);
+  fill-opacity: 0.15;
+  stroke: var(--element-soft);
+  stroke-width: 0.6;
+  filter: drop-shadow(0 0 12px var(--element-glow));
+}
+
+.cn-label {
+  font-family: var(--font-cn);
+  font-size: 13.5px;
+  font-weight: 500;
+  fill: var(--cream-dim);
+  text-anchor: middle;
+  dominant-baseline: central;
+  letter-spacing: 0.05em;
+  transition: fill 1.5s ease, font-size 1.5s ease;
+}
+.cn-label.active {
+  fill: var(--element);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.en-label {
+  font-family: var(--font-display);
+  font-size: 6px;
+  fill: var(--cream-faint);
+  text-anchor: middle;
+  dominant-baseline: central;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: fill 1.5s ease;
+}
+.en-label.active {
+  fill: var(--cream-dim);
+}
+
+.tick {
+  stroke: var(--cream-faint);
+  stroke-width: 0.4;
+}
+.tick.major {
+  stroke: var(--cream-dim);
+  stroke-width: 0.6;
+}
+
+.cardinal {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 9px;
+  fill: var(--cream-faint);
+  letter-spacing: 0.2em;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.center-disc {
+  fill: var(--ink);
+  stroke: var(--cream-faint);
+  stroke-width: 0.4;
+}
+
+.center-time {
+  font-family: var(--font-display);
+  font-style: italic;
+  fill: var(--cream);
+  text-anchor: middle;
+  dominant-baseline: central;
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+.center-label {
+  font-family: var(--font-display);
+  fill: var(--cream-faint);
+  text-anchor: middle;
+  font-size: 8px;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+}
+
+.hand-line {
+  stroke: var(--cream);
+  stroke-width: 0.8;
+  stroke-linecap: round;
+}
+.hand-bead {
+  fill: var(--element);
+  filter: drop-shadow(0 0 6px var(--element-soft));
+  transition: fill 1.5s ease;
+}
+.hand-center {
+  fill: var(--cream);
+}
+
+/* ORGAN CARD */
+.organ-card {
+  text-align: center;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 0 16px;
+}
+
+.organ-meta {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  color: var(--cream-dim);
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.organ-meta .dot {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--element);
+  display: inline-block;
+  transition: background 1.5s ease;
+}
+
+.organ-cn {
+  font-family: var(--font-cn);
+  font-size: 64px;
+  font-weight: 500;
+  color: var(--element);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  margin: 6px 0 -4px;
+  text-shadow: 0 0 50px var(--element-glow);
+  transition: color 1.5s ease, text-shadow 1.5s ease;
+}
+
+.organ-en {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 28px;
+  color: var(--cream);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.organ-focus {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  font-weight: 400;
+}
+
+.organ-intent {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--cream-dim);
+  line-height: 1.5;
+  max-width: 420px;
+  margin-top: 6px;
+}
+.organ-intent::before {
+  content: '"';
+  margin-right: 2px;
+  color: var(--element-soft);
+}
+.organ-intent::after {
+  content: '"';
+  margin-left: 2px;
+  color: var(--element-soft);
+}
+
+/* CONTROLS */
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  margin-top: 4px;
+}
+
+.btn-primary {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: transparent;
+  border: 0.5px solid var(--cream-faint);
+  padding: 18px 44px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.5s ease;
+  overflow: hidden;
+}
+.btn-primary:hover:not(:disabled) {
+  border-color: var(--element-soft);
+  color: var(--element);
+  letter-spacing: 0.42em;
+}
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: default;
+  color: var(--cream-dim);
+}
+
+.aux-controls {
+  display: flex;
+  gap: 28px;
+}
+.btn-secondary {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 4px;
+  transition: color 0.4s ease;
+}
+.btn-secondary:hover { color: var(--cream-dim); }
+.btn-secondary.on { color: var(--element); }
+
+.btn-micro {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.26em;
+  color: var(--cream-dim);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px 24px;
+  transition: color 0.4s ease, letter-spacing 0.5s ease;
+  margin-top: -6px;
+}
+.btn-micro:hover {
+  color: var(--element);
+  letter-spacing: 0.34em;
+}
+.btn-micro::before, .btn-micro::after {
+  content: '—';
+  color: var(--cream-faint);
+  margin: 0 10px;
+  transition: color 0.4s ease;
+}
+.btn-micro:hover::before, .btn-micro:hover::after {
+  color: var(--element-soft);
+}
+
+/* Install pill banner */
+.install-pill {
+  position: fixed;
+  bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  z-index: 90;
+  background: var(--ink-2);
+  border: 0.5px solid var(--element-soft);
+  padding: 14px 20px 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-family: var(--font-display);
+  color: var(--cream);
+  box-shadow: 0 12px 50px rgba(0,0,0,0.5), 0 0 30px var(--element-glow);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: calc(100vw - 32px);
+}
+.install-pill.show { transform: translateX(-50%) translateY(0); }
+.install-pill .label {
+  font-style: italic;
+  font-size: 14px;
+  color: var(--cream-dim);
+  letter-spacing: 0.02em;
+}
+.install-pill button {
+  background: transparent;
+  border: 0.5px solid var(--element-soft);
+  color: var(--element);
+  padding: 8px 16px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.install-pill button:hover {
+  background: var(--element-glow);
+}
+.install-pill .close {
+  border: none;
+  color: var(--cream-faint);
+  padding: 4px 8px;
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+/* Toast / wallpaper status */
+.toast {
+  position: fixed;
+  top: 32px; left: 50%;
+  transform: translateX(-50%) translateY(-30px);
+  z-index: 95;
+  background: var(--ink-2);
+  border: 0.5px solid var(--cream-faint);
+  padding: 12px 24px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* iOS install instructions */
+.ios-help {
+  position: fixed; inset: 0;
+  z-index: 220;
+  background: rgba(12,11,17,0.92);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.ios-help.active { opacity: 1; pointer-events: auto; }
+.ios-help-inner {
+  max-width: 440px;
+  text-align: center;
+  font-family: var(--font-display);
+  color: var(--cream);
+}
+.ios-help-inner h3 {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 18px;
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+.ios-help-inner p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--cream-dim);
+  font-style: italic;
+  margin-bottom: 14px;
+}
+.ios-help-inner .step {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(237,228,205,0.05);
+  border: 0.5px solid var(--cream-faint);
+  padding: 10px 16px;
+  margin: 6px 4px;
+  font-size: 14px;
+  font-style: normal;
+  color: var(--cream);
+}
+.ios-help-inner button {
+  margin-top: 24px;
+  background: transparent;
+  border: 0.5px solid var(--cream-faint);
+  color: var(--cream-dim);
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.ios-help-inner button:hover {
+  color: var(--cream);
+  border-color: var(--element-soft);
+}
+
+/* FOOTER */
+footer {
+  position: relative; z-index: 5;
+  text-align: center;
+  padding: 40px 24px 52px;
+  line-height: 1.9;
+  font-family: var(--font-display);
+  max-width: 520px;
+  margin: 0 auto;
+}
+footer .small {
+  font-family: var(--font-body);
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  font-weight: 400;
+}
+footer em {
+  font-style: italic;
+  color: var(--cream-dim);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+/* SESSION OVERLAY */
+.session {
+  position: fixed; inset: 0;
+  z-index: 200;
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.4s ease;
+}
+.session.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.session::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, var(--element-glow), transparent 65%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+.session::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.session-header {
+  position: absolute;
+  top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+.session-organ {
+  font-family: var(--font-cn);
+  font-size: 22px;
+  color: var(--element);
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+.session-timer {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.34em;
+  color: var(--cream-faint);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+}
+
+.breath-wrap {
+  position: relative;
+  width: 340px; height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.breath-circle {
+  position: absolute;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 0.5px solid var(--element-soft);
+  background: radial-gradient(circle, var(--element-glow), transparent 65%);
+  animation: breathe 10s ease-in-out infinite;
+}
+.breath-circle.outer {
+  opacity: 0.5;
+  animation-delay: -0.4s;
+}
+.breath-circle.inner {
+  border-color: var(--element);
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(0.58); opacity: 0.55; }
+  40% { transform: scale(1.0); opacity: 1; }
+}
+
+.breath-label {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--cream);
+  letter-spacing: 0.15em;
+  position: relative;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+.guidance {
+  position: absolute;
+  bottom: 130px;
+  max-width: 580px;
+  padding: 0 32px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--cream);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+  z-index: 2;
+}
+.guidance.show { opacity: 0.95; }
+
+.session-end {
+  position: absolute;
+  bottom: 48px;
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px 16px;
+  transition: color 0.4s ease, letter-spacing 0.4s ease;
+  z-index: 2;
+  font-weight: 500;
+}
+.session-end:hover {
+  color: var(--cream-dim);
+  letter-spacing: 0.52em;
+}
+
+/* ABOUT OVERLAY */
+.about {
+  position: fixed; inset: 0;
+  z-index: 150;
+  background: rgba(12,11,17,0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.about.active { opacity: 1; pointer-events: auto; }
+.about-inner {
+  max-width: 560px;
+  text-align: left;
+  color: var(--cream);
+}
+.about-inner h2 {
+  font-family: var(--font-cn);
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  letter-spacing: 0.08em;
+}
+.about-inner .sub {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  margin-bottom: 28px;
+}
+.about-inner p {
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--cream-dim);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+.about-close {
+  margin-top: 24px;
+}
+
+/* REVEAL */
+.fade-in { opacity: 0; animation: fadeIn 1.6s ease-out forwards; }
+.fade-in.d1 { animation-delay: 0.1s; }
+.fade-in.d2 { animation-delay: 0.5s; }
+.fade-in.d3 { animation-delay: 1.0s; }
+.fade-in.d4 { animation-delay: 1.5s; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* MOBILE */
+@media (max-width: 720px) {
+  header { padding: 22px 22px; }
+  .brand .cn { font-size: 16px; }
+  .brand .en { font-size: 10px; letter-spacing: 0.3em; }
+  .live-time { font-size: 12px; }
+  main { gap: 32px; padding: 0 16px 50px; }
+  .organ-cn { font-size: 50px; }
+  .organ-en { font-size: 22px; }
+  .organ-intent { font-size: 17px; }
+  .organ-meta { font-size: 9.5px; letter-spacing: 0.3em; gap: 10px; }
+  .btn-primary { font-size: 11px; letter-spacing: 0.28em; padding: 16px 32px; }
+  .breath-wrap { width: 260px; height: 260px; }
+  .guidance { font-size: 18px; bottom: 100px; }
+  .session-header { top: 32px; }
+  footer { padding: 28px 20px 40px; }
+}
+</style>
+</head>
+
+<body>
+  <div class="grain"></div>
+  <div class="vignette"></div>
+
+  <header>
+    <div class="brand fade-in d1">
+      <span class="cn">經絡</span>
+      <span class="en">Meridian</span>
+    </div>
+    <div class="live-time fade-in d1" id="liveTime">—</div>
+  </header>
+
+  <main>
+    <div class="clock-wrap fade-in d2">
+      <svg class="clock" id="clock" viewBox="-210 -210 420 420" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+
+    <div class="organ-card fade-in d3" id="organCard"></div>
+
+    <div class="controls fade-in d4">
+      <button class="btn-primary" id="startBtn">— —</button>
+      <button class="btn-micro" id="microBtn">60-second check-in</button>
+      <div class="aux-controls">
+        <button class="btn-secondary" id="soundBtn">Sound · off</button>
+        <button class="btn-secondary" id="wallpaperBtn">Wallpaper</button>
+        <button class="btn-secondary" id="aboutBtn">About</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Install pill -->
+  <div class="install-pill" id="installPill">
+    <span class="label">Keep <em>Meridian</em> on your home screen.</span>
+    <button id="installBtn">Install</button>
+    <button class="close" id="installClose" aria-label="Close">×</button>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- iOS install help -->
+  <div class="ios-help" id="iosHelp">
+    <div class="ios-help-inner">
+      <h3>Add Meridian to your home screen</h3>
+      <p>iOS adds web apps through Safari's share menu.</p>
+      <div>
+        <div class="step">1 — Tap the Share button ⎙</div>
+        <div class="step">2 — Scroll, then tap "Add to Home Screen"</div>
+        <div class="step">3 — Confirm</div>
+      </div>
+      <p style="margin-top: 22px; font-size: 14px;">It will then live on your home screen and open without the browser bar.</p>
+      <button id="iosHelpClose">— close —</button>
+    </div>
+  </div>
+
+  <footer class="fade-in d4">
+    <em>"Sleep is the practice when the body is at work."</em><br>
+    <span class="small" style="margin-top: 10px; display: inline-block;">
+      A contemplative framework — not medical guidance.
+    </span>
+  </footer>
+
+  <!-- SESSION OVERLAY -->
+  <div class="session" id="session">
+    <div class="session-header">
+      <div class="session-organ" id="sessionOrgan">—</div>
+      <div class="session-timer" id="sessionTimer">— : —</div>
+    </div>
+
+    <div class="breath-wrap">
+      <div class="breath-circle outer"></div>
+      <div class="breath-circle inner"></div>
+      <div class="breath-label" id="breathLabel">breathe in</div>
+    </div>
+
+    <div class="guidance" id="guidance"></div>
+    <button class="session-end" id="endBtn">end practice</button>
+  </div>
+
+  <!-- ABOUT OVERLAY -->
+  <div class="about" id="about">
+    <div class="about-inner">
+      <h2>經絡</h2>
+      <div class="sub">A TCM Nap Clock</div>
+      <p>Each two-hour window of the day has a ruling organ-meridian in Traditional Chinese Medicine, and each organ has its own seat in the body.</p>
+      <p>Meridian fuses that map with Yoga Nidra's practice of <em>nyāsa</em> — rotating awareness through the body — to suggest short restorative micro-naps that either <em>replenish</em> a depleted organ or <em>harmonize</em> one at its peak.</p>
+      <p>Working windows ask only that you work. Passive windows ask that you sleep. The rest are invitations to lie down for ten or fifteen minutes and let the body be the practice.</p>
+      <button class="btn-secondary about-close" id="aboutClose">— close —</button>
+    </div>
+  </div>
+
+<script>
+// ==================== MERIDIAN DATA ====================
+const MERIDIANS = [
+  { start: 3,  end: 5,  cn: '肺',   en: 'Lung',            element: 'metal',
+    focus: 'chest · breath',         mode: 'passive',
+    intent: 'Deep sleep. The lungs renew without your help.',
+    duration: 0, guidance: [] },
+  { start: 5,  end: 7,  cn: '大腸', en: 'Large Intestine', element: 'metal',
+    focus: 'belly · release',        mode: 'passive',
+    intent: 'The body releases. Hydrate. Move gently.',
+    duration: 0, guidance: [] },
+  { start: 7,  end: 9,  cn: '胃',   en: 'Stomach',         element: 'earth',
+    focus: 'navel · manipura',       mode: 'grounding',
+    intent: 'A grounding scan — kindle the digestive fire.',
+    duration: 8,
+    guidance: [
+      'Settle. Allow the body to be still.',
+      'Three slow exhales, longer than the in-breath.',
+      'Bring attention to the navel — the center of your warmth.',
+      'Sense a small golden ember, just behind the navel.',
+      'On each in-breath, the ember brightens.',
+      'On each out-breath, warmth spreads through the belly.',
+      'Let warmth reach the lower ribs, the lower back.',
+      'Rest here for a few breaths, gathering.',
+      'Slowly return — the fire lit, ready for the day.'
+    ]},
+  { start: 9,  end: 11, cn: '脾',   en: 'Spleen',          element: 'earth',
+    focus: 'navel · thought',        mode: 'active',
+    intent: 'Peak digestion and thinking. Work — do not nap.',
+    duration: 0, guidance: [] },
+  { start: 11, end: 13, cn: '心',   en: 'Heart',           element: 'fire',
+    focus: 'heart center · anahata', mode: 'rest',
+    intent: 'Quiet the chatter. Sit briefly with the heart.',
+    duration: 10,
+    guidance: [
+      'Settle. A hand on the heart, if it helps.',
+      'Sense the space between the collarbones.',
+      'Move awareness down the sternum, to the heart.',
+      'Behind the heart — the upper back, the shoulder blades.',
+      'A warm red glow at the center of the chest.',
+      'With each breath, the glow softens and expands.',
+      'Out to the shoulders, down to the fingertips.',
+      'The heart asks for nothing. Only that you listen.',
+      'Rest in the warmth of being known by yourself.',
+      'Slowly return, carrying this softness forward.'
+    ]},
+  { start: 13, end: 15, cn: '小腸', en: 'Small Intestine', element: 'fire',
+    focus: 'lower belly · hara',     mode: 'siesta',
+    intent: 'The classic siesta — digest, assimilate, let go.',
+    duration: 18,
+    guidance: [
+      'Lie down. Allow the body to be heavy.',
+      'Three slow exhales, like setting down a weight.',
+      'Awareness to the lower belly, two fingers below the navel.',
+      'This is the hara — the storehouse of vitality.',
+      'Feel the weight of the belly sinking down.',
+      'Sense the breath moving in the lower abdomen.',
+      'A warm amber light gathers there.',
+      'With each in-breath, the light pools deeper.',
+      'With each out-breath, the body grows heavier.',
+      'Let the mind drift — assimilation needs no effort.',
+      'If thoughts arise, return to the warmth at the hara.',
+      'Rest here. The body knows what to do.',
+      '...',
+      'Slowly, sense the room around you.',
+      'A small breath. A small movement.',
+      'Return when you are ready.'
+    ]},
+  { start: 15, end: 17, cn: '膀胱', en: 'Bladder',         element: 'water',
+    focus: 'lower back · sacrum',    mode: 'reset',
+    intent: 'Afternoon reset. Release the lower back.',
+    duration: 10,
+    guidance: [
+      'Sit or lie down. Soften the jaw.',
+      'Bring awareness to the lower back.',
+      'Sense the sacrum — the broad bone at the base of the spine.',
+      'On each in-breath, the lower back widens.',
+      'On each out-breath, it softens.',
+      'A cool dark blue light pools at the sacrum.',
+      'Imagine water flowing down the back of the legs.',
+      'Down to the soles of the feet, out through the heels.',
+      'Whatever the day has stored — let it drain.',
+      'Rest in the coolness for a few breaths.',
+      'Slowly return, the spine longer, the mind clearer.'
+    ]},
+  { start: 17, end: 19, cn: '腎',   en: 'Kidney',          element: 'water',
+    focus: 'kidneys · jing',         mode: 'restore',
+    intent: 'Replenish the deep reserves. Restore jing.',
+    duration: 12,
+    guidance: [
+      'Lie down. Hands on the lower back, if it feels right.',
+      'Find the kidneys — above the waist, either side of the spine.',
+      'Sense their weight. Their quiet, continuous work.',
+      'A deep indigo glow at each kidney.',
+      'On each in-breath, the glow deepens.',
+      'On each out-breath, warmth spreads through the lower back.',
+      'These are the body\u2019s ancient reservoirs.',
+      'They hold the energy of lineage, of bones, of will.',
+      'Let them be filled by the simple act of breathing.',
+      'Nothing to earn. Nothing to fix.',
+      'Rest in the deep, dark water of yourself.',
+      'Slowly return, replenished.'
+    ]},
+  { start: 19, end: 21, cn: '心包', en: 'Pericardium',     element: 'fire',
+    focus: 'heart sheath',           mode: 'wind-down',
+    intent: 'Wind down. Soften the heart\u2019s armor.',
+    duration: 6,
+    guidance: [
+      'Settle. The day is closing.',
+      'Sense the heart, wrapped in its protective sheath.',
+      'A soft pink-red glow around the heart.',
+      'With each breath, the sheath softens.',
+      'Let the day\u2019s armor loosen.',
+      'You are safe here, in this moment.',
+      'Rest in the open heart.',
+      'Slowly return, gentler than before.'
+    ]},
+  { start: 21, end: 23, cn: '三焦', en: 'Triple Burner',   element: 'fire',
+    focus: 'whole torso',            mode: 'passive',
+    intent: 'The body harmonizes. Begin preparing for sleep.',
+    duration: 0, guidance: [] },
+  { start: 23, end: 25, cn: '膽',   en: 'Gallbladder',     element: 'wood',
+    focus: 'side body · decision',   mode: 'passive',
+    intent: 'Sleep is the practice. The gallbladder renews.',
+    duration: 0, guidance: [] },
+  { start: 1,  end: 3,  cn: '肝',   en: 'Liver',           element: 'wood',
+    focus: 'liver · right side',     mode: 'passive',
+    intent: 'Deep sleep. The liver cleanses the blood.',
+    duration: 0, guidance: [] }
+];
+
+const ELEMENTS = {
+  wood:  { color: '#86a892', soft: 'rgba(134,168,146,0.5)', glow: 'rgba(134,168,146,0.16)', note: 'E3' },
+  fire:  { color: '#d65843', soft: 'rgba(214,88,67,0.5)',   glow: 'rgba(214,88,67,0.18)',   note: 'G3' },
+  earth: { color: '#cf9858', soft: 'rgba(207,152,88,0.5)',  glow: 'rgba(207,152,88,0.18)',  note: 'C3' },
+  metal: { color: '#cdd4d8', soft: 'rgba(205,212,216,0.4)', glow: 'rgba(205,212,216,0.14)', note: 'D3' },
+  water: { color: '#6a7eb8', soft: 'rgba(106,126,184,0.5)', glow: 'rgba(106,126,184,0.18)', note: 'A2' }
+};
+
+// ==================== SVG GEOMETRY ====================
+const segOuter = 188;
+const segInner = 138;
+const tickInner = 132;
+const cnRadius = 165;
+const enRadius = 115;
+const centerR = 64;
+const handLen = 95;
+
+function polarToCart(r, deg) {
+  const rad = (deg - 90) * Math.PI / 180;
+  return { x: r * Math.cos(rad), y: r * Math.sin(rad) };
+}
+
+function annular(rIn, rOut, startDeg, endDeg) {
+  const sO = polarToCart(rOut, startDeg);
+  const eO = polarToCart(rOut, endDeg);
+  const sI = polarToCart(rIn, startDeg);
+  const eI = polarToCart(rIn, endDeg);
+  const large = (endDeg - startDeg) > 180 ? 1 : 0;
+  return `M ${sO.x} ${sO.y}
+          A ${rOut} ${rOut} 0 ${large} 1 ${eO.x} ${eO.y}
+          L ${eI.x} ${eI.y}
+          A ${rIn} ${rIn} 0 ${large} 0 ${sI.x} ${sI.y}
+          Z`;
+}
+
+function buildClock() {
+  const svg = document.getElementById('clock');
+  let html = '';
+
+  // Decorative outer rings
+  html += `<circle cx="0" cy="0" r="200" fill="none" stroke="rgba(237,228,205,0.06)" stroke-width="0.4"/>`;
+  html += `<circle cx="0" cy="0" r="${segOuter}" fill="none" stroke="rgba(237,228,205,0.1)" stroke-width="0.4"/>`;
+  html += `<circle cx="0" cy="0" r="${segInner}" fill="none" stroke="rgba(237,228,205,0.1)" stroke-width="0.4"/>`;
+  html += `<circle cx="0" cy="0" r="98" fill="none" stroke="rgba(237,228,205,0.05)" stroke-width="0.4"/>`;
+
+  // 12 segments
+  MERIDIANS.forEach((m, i) => {
+    const sDeg = m.start / 24 * 360;
+    const eDeg = m.end / 24 * 360;
+    html += `<path id="seg-${i}" class="segment" d="${annular(segInner, segOuter, sDeg, eDeg)}"/>`;
+  });
+
+  // Hour ticks
+  for (let h = 0; h < 24; h++) {
+    const deg = h / 24 * 360;
+    const isMajor = h % 2 === 0;
+    const len = isMajor ? 8 : 4;
+    const s = polarToCart(tickInner, deg);
+    const e = polarToCart(tickInner - len, deg);
+    html += `<line class="tick ${isMajor ? 'major' : ''}" x1="${s.x}" y1="${s.y}" x2="${e.x}" y2="${e.y}"/>`;
+  }
+
+  // Cardinal hour markers (6, 12, 18, 24)
+  const cardinals = [
+    { deg: 0,   label: '00' },
+    { deg: 90,  label: '06' },
+    { deg: 180, label: '12' },
+    { deg: 270, label: '18' }
+  ];
+  cardinals.forEach(c => {
+    const p = polarToCart(106, c.deg);
+    html += `<text class="cardinal" x="${p.x}" y="${p.y}">${c.label}</text>`;
+  });
+
+  // CN labels
+  const shorten = (en) => ({
+    'Large Intestine': 'L. Intestine',
+    'Small Intestine': 'S. Intestine',
+    'Triple Burner':   'Triple Burner',
+    'Pericardium':     'Pericardium',
+    'Gallbladder':     'Gallbladder'
+  })[en] || en;
+
+  MERIDIANS.forEach((m, i) => {
+    const midDeg = (m.start + m.end) / 2 / 24 * 360;
+    const p = polarToCart(cnRadius, midDeg);
+    html += `<text id="cn-${i}" class="cn-label" x="${p.x}" y="${p.y}">${m.cn}</text>`;
+  });
+  MERIDIANS.forEach((m, i) => {
+    const midDeg = (m.start + m.end) / 2 / 24 * 360;
+    const p = polarToCart(enRadius, midDeg);
+    html += `<text id="en-${i}" class="en-label" x="${p.x}" y="${p.y}">${shorten(m.en).toUpperCase()}</text>`;
+  });
+
+  // Center disc
+  html += `<circle class="center-disc" cx="0" cy="0" r="${centerR}"/>`;
+  html += `<circle cx="0" cy="0" r="${centerR - 6}" fill="none" stroke="rgba(237,228,205,0.06)" stroke-width="0.3"/>`;
+
+  // Center time
+  html += `<text id="centerTime" class="center-time" x="0" y="-4">— : —</text>`;
+  html += `<text class="center-label" x="0" y="22">NOW</text>`;
+
+  // Hand
+  html += `<g id="handGroup">
+    <line class="hand-line" x1="0" y1="-${centerR - 4}" x2="0" y2="-${centerR + handLen}"/>
+    <circle class="hand-bead" cx="0" cy="-${centerR + handLen}" r="3.5"/>
+    <circle class="hand-center" cx="0" cy="0" r="2"/>
+  </g>`;
+
+  svg.innerHTML = html;
+}
+
+// ==================== STATE ====================
+let currentMeridian = null;
+
+function getCurrentMeridian(now) {
+  const h = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
+  for (const m of MERIDIANS) {
+    if (m.end > 24) {
+      if (h >= m.start || h < (m.end - 24)) return m;
+    } else {
+      if (h >= m.start && h < m.end) return m;
+    }
+  }
+  return MERIDIANS[0];
+}
+
+function formatTime(date) {
+  const h = date.getHours();
+  const m = date.getMinutes();
+  return `${String(h).padStart(2,'0')} : ${String(m).padStart(2,'0')}`;
+}
+
+function formatHour(h) {
+  const hh = Math.floor(h) % 24;
+  return `${String(hh).padStart(2,'0')}:00`;
+}
+
+function update() {
+  const now = new Date();
+  document.getElementById('liveTime').textContent = formatTime(now);
+  const ct = document.getElementById('centerTime');
+  if (ct) ct.textContent = formatTime(now);
+
+  const m = getCurrentMeridian(now);
+  const h = now.getHours() + now.getMinutes()/60 + now.getSeconds()/3600;
+  const angle = h / 24 * 360;
+  const handGroup = document.getElementById('handGroup');
+  if (handGroup) handGroup.setAttribute('transform', `rotate(${angle})`);
+
+  if (!currentMeridian || currentMeridian.cn !== m.cn) {
+    currentMeridian = m;
+    applyMeridian(m);
+  }
+}
+
+function applyMeridian(m) {
+  // Segment / label highlight
+  MERIDIANS.forEach((mer, i) => {
+    const seg = document.getElementById(`seg-${i}`);
+    const cn = document.getElementById(`cn-${i}`);
+    const en = document.getElementById(`en-${i}`);
+    const isActive = mer.cn === m.cn;
+    if (seg) seg.classList.toggle('active', isActive);
+    if (cn) cn.classList.toggle('active', isActive);
+    if (en) en.classList.toggle('active', isActive);
+  });
+
+  // Theme
+  const el = ELEMENTS[m.element];
+  document.documentElement.style.setProperty('--element', el.color);
+  document.documentElement.style.setProperty('--element-soft', el.soft);
+  document.documentElement.style.setProperty('--element-glow', el.glow);
+
+  // Card
+  const card = document.getElementById('organCard');
+  const endHour = m.end > 24 ? m.end - 24 : m.end;
+  card.innerHTML = `
+    <div class="organ-meta">
+      <span>${formatHour(m.start)} — ${formatHour(endHour)}</span>
+      <span class="dot"></span>
+      <span>${m.element}</span>
+      <span class="dot"></span>
+      <span>${m.mode}</span>
+    </div>
+    <div class="organ-cn">${m.cn}</div>
+    <div class="organ-en">${m.en}</div>
+    <div class="organ-focus">focus · ${m.focus}</div>
+    <div class="organ-intent">${m.intent}</div>
+  `;
+
+  // CTA
+  const btn = document.getElementById('startBtn');
+  if (m.duration > 0) {
+    btn.disabled = false;
+    btn.textContent = `Begin ${m.en} practice · ${m.duration} min`;
+  } else {
+    btn.disabled = true;
+    btn.textContent = m.mode === 'passive'
+      ? 'A passive window — sleep is the practice'
+      : 'A working window — do not nap';
+  }
+
+  // Audio retune
+  if (audioActive) setDroneNote(el.note);
+}
+
+// ==================== SESSION ====================
+let sessionTimer = null;
+let guidanceTimer = null;
+let breathTimer = null;
+let sessionEnd = 0;
+let currentSessionMeridian = null;
+
+function startSession(m) {
+  if (m.duration <= 0) return;
+  currentSessionMeridian = m;
+
+  const session = document.getElementById('session');
+  session.classList.add('active');
+
+  document.getElementById('sessionOrgan').textContent = `${m.cn} · ${m.en}`;
+
+  const totalMs = m.duration * 60 * 1000;
+  sessionEnd = Date.now() + totalMs;
+
+  // Guidance cycling
+  const guidanceEl = document.getElementById('guidance');
+  const lines = m.guidance;
+  const interval = totalMs / lines.length;
+  let idx = 0;
+
+  function showLine() {
+    if (idx >= lines.length) return;
+    guidanceEl.classList.remove('show');
+    setTimeout(() => {
+      guidanceEl.textContent = lines[idx];
+      requestAnimationFrame(() => guidanceEl.classList.add('show'));
+      idx++;
+    }, 900);
+  }
+  showLine();
+  guidanceTimer = setInterval(showLine, interval);
+
+  // Timer countdown
+  function tick() {
+    const remain = Math.max(0, sessionEnd - Date.now());
+    const mins = Math.floor(remain / 60000);
+    const secs = Math.floor((remain % 60000) / 1000);
+    document.getElementById('sessionTimer').textContent =
+      `${String(mins).padStart(2,'0')} : ${String(secs).padStart(2,'0')}  remaining`;
+    if (remain <= 0) endSession(true);
+  }
+  tick();
+  sessionTimer = setInterval(tick, 500);
+
+  // Breath label, synced to 10s cycle
+  startBreathLabel();
+}
+
+function startBreathLabel() {
+  const label = document.getElementById('breathLabel');
+  function cycle() {
+    label.textContent = 'breathe in';
+    label.style.opacity = '0.85';
+    setTimeout(() => { label.style.opacity = '0'; }, 3400);
+    setTimeout(() => {
+      label.textContent = 'breathe out';
+      label.style.opacity = '0.85';
+    }, 4400);
+    setTimeout(() => { label.style.opacity = '0'; }, 9200);
+  }
+  cycle();
+  breathTimer = setInterval(cycle, 10000);
+}
+
+function endSession(natural) {
+  const session = document.getElementById('session');
+  session.classList.remove('active');
+  clearInterval(sessionTimer);
+  clearInterval(guidanceTimer);
+  clearInterval(breathTimer);
+  const g = document.getElementById('guidance');
+  g.classList.remove('show');
+  document.getElementById('breathLabel').style.opacity = '0';
+}
+
+// ==================== AUDIO (Tone.js drone) ====================
+let audioActive = false;
+let synth = null;
+let filter = null;
+let lfo = null;
+let currentNotes = null;
+let reverb = null;
+
+async function initAudio() {
+  await Tone.start();
+  filter = new Tone.Filter(700, 'lowpass').toDestination();
+  filter.Q.value = 1;
+  reverb = new Tone.Reverb({ decay: 9, wet: 0.78 }).connect(filter);
+  synth = new Tone.PolySynth(Tone.Synth, {
+    oscillator: { type: 'sine' },
+    envelope: { attack: 5, decay: 0, sustain: 1, release: 5 },
+    volume: -24
+  }).connect(reverb);
+  lfo = new Tone.LFO(0.04, 450, 1100);
+  lfo.connect(filter.frequency);
+  lfo.start();
+}
+
+function setDroneNote(note) {
+  if (!synth) return;
+  const newNotes = [note, Tone.Frequency(note).transpose(7).toNote()];
+  if (currentNotes) synth.triggerRelease(currentNotes);
+  synth.triggerAttack(newNotes);
+  currentNotes = newNotes;
+}
+
+async function toggleSound() {
+  const btn = document.getElementById('soundBtn');
+  if (!audioActive) {
+    if (!synth) await initAudio();
+    audioActive = true;
+    btn.textContent = 'Sound · on';
+    btn.classList.add('on');
+    if (currentMeridian) setDroneNote(ELEMENTS[currentMeridian.element].note);
+  } else {
+    if (synth && currentNotes) {
+      synth.triggerRelease(currentNotes);
+      currentNotes = null;
+    }
+    audioActive = false;
+    btn.textContent = 'Sound · off';
+    btn.classList.remove('on');
+  }
+}
+
+// ==================== MICRO CHECK-IN PROMPTS ====================
+const MICRO_PROMPTS = {
+  '肺':   'Settle the breath at the chest. Soften the sternum.',
+  '大腸': 'Hand on the lower belly. Let the body release.',
+  '胃':   'Warmth at the navel. Steady inhale, slow exhale.',
+  '脾':   'Soften the thinking. Three breaths at the center.',
+  '心':   'Hand on the heart. Listen, do not narrate.',
+  '小腸': 'Weight in the lower belly. Let the body assimilate.',
+  '膀胱': 'Soften the lower back. Let the spine lengthen.',
+  '腎':   'Hands on the kidneys. Three slow breaths into the back.',
+  '心包': 'Soften the heart\u2019s outer edge. Loosen the day\u2019s armor.',
+  '三焦': 'Notice the whole torso. The body harmonizes.',
+  '膽':   'Side body soft. The gallbladder works in your stead.',
+  '肝':   'Right side soft. The blood cleanses while you rest.'
+};
+
+function startMicroSession(m) {
+  const session = document.getElementById('session');
+  session.classList.add('active');
+
+  document.getElementById('sessionOrgan').textContent = `${m.cn} · ${m.en}`;
+
+  const totalMs = 60 * 1000;
+  sessionEnd = Date.now() + totalMs;
+
+  // Single prompt — no rotation
+  const guidanceEl = document.getElementById('guidance');
+  const prompt = MICRO_PROMPTS[m.cn] || m.intent;
+  guidanceEl.classList.remove('show');
+  setTimeout(() => {
+    guidanceEl.textContent = prompt;
+    requestAnimationFrame(() => guidanceEl.classList.add('show'));
+  }, 600);
+
+  // Timer
+  function tick() {
+    const remain = Math.max(0, sessionEnd - Date.now());
+    const secs = Math.ceil(remain / 1000);
+    document.getElementById('sessionTimer').textContent = `${String(secs).padStart(2,'0')}s  remaining`;
+    if (remain <= 0) endSession(true);
+  }
+  tick();
+  sessionTimer = setInterval(tick, 250);
+
+  startBreathLabel();
+}
+
+// ==================== WALLPAPER EXPORT ====================
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+function polarToCartCanvas(r, deg) {
+  const rad = (deg - 90) * Math.PI / 180;
+  return { x: r * Math.cos(rad), y: r * Math.sin(rad) };
+}
+
+function drawAnnularSectorCanvas(ctx, rIn, rOut, startDeg, endDeg) {
+  const sR = (startDeg - 90) * Math.PI / 180;
+  const eR = (endDeg - 90) * Math.PI / 180;
+  ctx.beginPath();
+  ctx.arc(0, 0, rOut, sR, eR, false);
+  ctx.arc(0, 0, rIn, eR, sR, true);
+  ctx.closePath();
+}
+
+function wrapTextCanvas(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  let yy = y;
+  let lines = [];
+  for (const w of words) {
+    const test = line ? line + ' ' + w : w;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = w;
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  lines.forEach((l, i) => {
+    ctx.fillText(l, x, yy + i * lineHeight);
+  });
+  return lines.length;
+}
+
+function drawClockOnCanvas(ctx, m, el) {
+  // Outer decorative circles
+  ctx.strokeStyle = 'rgba(237,228,205,0.08)';
+  ctx.lineWidth = 0.5;
+  ctx.beginPath();
+  ctx.arc(0, 0, 200, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = 'rgba(237,228,205,0.13)';
+  ctx.beginPath();
+  ctx.arc(0, 0, 188, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(0, 0, 138, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.strokeStyle = 'rgba(237,228,205,0.05)';
+  ctx.beginPath();
+  ctx.arc(0, 0, 98, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // Segments
+  MERIDIANS.forEach((mer) => {
+    const sDeg = mer.start / 24 * 360;
+    const eDeg = mer.end / 24 * 360;
+    const isActive = mer.cn === m.cn;
+    drawAnnularSectorCanvas(ctx, 138, 188, sDeg, eDeg);
+    ctx.fillStyle = isActive ? hexToRgba(el.color, 0.17) : 'rgba(237,228,205,0.02)';
+    ctx.fill();
+    ctx.strokeStyle = isActive ? hexToRgba(el.color, 0.55) : 'rgba(237,228,205,0.2)';
+    ctx.lineWidth = isActive ? 0.7 : 0.4;
+    ctx.stroke();
+  });
+
+  // Ticks
+  for (let h = 0; h < 24; h++) {
+    const deg = h / 24 * 360;
+    const major = h % 2 === 0;
+    const len = major ? 8 : 4;
+    const p1 = polarToCartCanvas(132, deg);
+    const p2 = polarToCartCanvas(132 - len, deg);
+    ctx.strokeStyle = major ? 'rgba(237,228,205,0.62)' : 'rgba(237,228,205,0.2)';
+    ctx.lineWidth = major ? 0.7 : 0.4;
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.stroke();
+  }
+
+  // Cardinal hour markers
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  [{deg:0,l:'00'},{deg:90,l:'06'},{deg:180,l:'12'},{deg:270,l:'18'}].forEach(c => {
+    const p = polarToCartCanvas(106, c.deg);
+    ctx.font = 'italic 9px "Cormorant Garamond", serif';
+    ctx.fillStyle = 'rgba(237,228,205,0.2)';
+    ctx.fillText(c.l, p.x, p.y);
+  });
+
+  // CN labels
+  MERIDIANS.forEach((mer) => {
+    const midDeg = (mer.start + mer.end) / 2 / 24 * 360;
+    const p = polarToCartCanvas(165, midDeg);
+    const isActive = mer.cn === m.cn;
+    ctx.font = isActive ? '600 17px "Noto Serif SC", serif' : '500 13.5px "Noto Serif SC", serif';
+    ctx.fillStyle = isActive ? el.color : 'rgba(237,228,205,0.62)';
+    ctx.fillText(mer.cn, p.x, p.y);
+  });
+
+  // EN labels
+  MERIDIANS.forEach((mer) => {
+    const midDeg = (mer.start + mer.end) / 2 / 24 * 360;
+    const p = polarToCartCanvas(115, midDeg);
+    const isActive = mer.cn === m.cn;
+    ctx.font = '500 6px "Cormorant Garamond", serif';
+    ctx.fillStyle = isActive ? 'rgba(237,228,205,0.62)' : 'rgba(237,228,205,0.22)';
+    ctx.fillText(mer.en.toUpperCase(), p.x, p.y);
+  });
+
+  // Center disc
+  ctx.fillStyle = '#0c0b11';
+  ctx.beginPath();
+  ctx.arc(0, 0, 64, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(237,228,205,0.2)';
+  ctx.lineWidth = 0.4;
+  ctx.stroke();
+
+  // Center time
+  const now = new Date();
+  ctx.font = 'italic 22px "Cormorant Garamond", serif';
+  ctx.fillStyle = '#ede4cd';
+  ctx.fillText(formatTime(now), 0, -4);
+  ctx.font = '8px "Cormorant Garamond", serif';
+  ctx.fillStyle = 'rgba(237,228,205,0.22)';
+  ctx.fillText('N O W', 0, 22);
+
+  // Hand
+  const h = now.getHours() + now.getMinutes()/60 + now.getSeconds()/3600;
+  const angle = h / 24 * 360;
+  const handStart = polarToCartCanvas(60, angle);
+  const handEnd = polarToCartCanvas(159, angle);
+  ctx.strokeStyle = '#ede4cd';
+  ctx.lineWidth = 0.8;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(handStart.x, handStart.y);
+  ctx.lineTo(handEnd.x, handEnd.y);
+  ctx.stroke();
+
+  // Bead
+  ctx.shadowColor = el.color;
+  ctx.shadowBlur = 10;
+  ctx.fillStyle = el.color;
+  ctx.beginPath();
+  ctx.arc(handEnd.x, handEnd.y, 3.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Center dot
+  ctx.fillStyle = '#ede4cd';
+  ctx.beginPath();
+  ctx.arc(0, 0, 2, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function showToast(text, duration = 2400) {
+  const t = document.getElementById('toast');
+  t.textContent = text;
+  t.classList.add('show');
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(() => t.classList.remove('show'), duration);
+}
+
+async function generateWallpaper() {
+  if (!currentMeridian) return;
+  showToast('Composing wallpaper…');
+
+  // Wait for fonts
+  try {
+    await Promise.all([
+      document.fonts.load('500 13.5px "Noto Serif SC"'),
+      document.fonts.load('600 17px "Noto Serif SC"'),
+      document.fonts.load('500 22px "Noto Serif SC"'),
+      document.fonts.load('500 320px "Noto Serif SC"'),
+      document.fonts.load('italic 400 22px "Cormorant Garamond"'),
+      document.fonts.load('italic 400 72px "Cormorant Garamond"'),
+      document.fonts.load('italic 400 44px "Cormorant Garamond"'),
+      document.fonts.load('500 6px "Cormorant Garamond"'),
+      document.fonts.load('400 20px "Fraunces"')
+    ]);
+  } catch (e) { /* continue with fallbacks */ }
+
+  const W = 1080, H = 2340;
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingQuality = 'high';
+
+  const m = currentMeridian;
+  const el = ELEMENTS[m.element];
+
+  // Background
+  ctx.fillStyle = '#0c0b11';
+  ctx.fillRect(0, 0, W, H);
+
+  // Element glow at top
+  const glow = ctx.createRadialGradient(W/2, 760, 0, W/2, 760, 1100);
+  glow.addColorStop(0, hexToRgba(el.color, 0.20));
+  glow.addColorStop(0.4, hexToRgba(el.color, 0.07));
+  glow.addColorStop(1, 'rgba(12,11,17,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle vignette
+  const vig = ctx.createRadialGradient(W/2, H/2, 600, W/2, H/2, 1400);
+  vig.addColorStop(0, 'rgba(0,0,0,0)');
+  vig.addColorStop(1, 'rgba(0,0,0,0.55)');
+  ctx.fillStyle = vig;
+  ctx.fillRect(0, 0, W, H);
+
+  // Procedural grain
+  const grainCanvas = document.createElement('canvas');
+  grainCanvas.width = 240; grainCanvas.height = 240;
+  const gctx = grainCanvas.getContext('2d');
+  const imgData = gctx.createImageData(240, 240);
+  for (let i = 0; i < imgData.data.length; i += 4) {
+    const v = Math.random() * 255;
+    imgData.data[i] = v; imgData.data[i+1] = v; imgData.data[i+2] = v;
+    imgData.data[i+3] = 18;
+  }
+  gctx.putImageData(imgData, 0, 0);
+  const pattern = ctx.createPattern(grainCanvas, 'repeat');
+  ctx.globalCompositeOperation = 'overlay';
+  ctx.fillStyle = pattern;
+  ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'source-over';
+
+  // Draw clock
+  ctx.save();
+  ctx.translate(W/2, 760);
+  const scale = 1.85;  // clock from 200 unit radius -> 370px
+  ctx.scale(scale, scale);
+  drawClockOnCanvas(ctx, m, el);
+  ctx.restore();
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+
+  // Divider
+  ctx.strokeStyle = 'rgba(237,228,205,0.12)';
+  ctx.lineWidth = 0.6;
+  ctx.beginPath();
+  ctx.moveTo(W/2 - 60, 1380);
+  ctx.lineTo(W/2 + 60, 1380);
+  ctx.stroke();
+
+  // Brand
+  ctx.font = '500 24px "Noto Serif SC", serif';
+  ctx.fillStyle = 'rgba(237,228,205,0.55)';
+  ctx.letterSpacing = '6px';
+  ctx.fillText('經絡  ·  MERIDIAN', W/2, 1440);
+
+  // Big organ character with glow
+  ctx.shadowColor = hexToRgba(el.color, 0.7);
+  ctx.shadowBlur = 80;
+  ctx.font = '500 340px "Noto Serif SC", serif';
+  ctx.fillStyle = el.color;
+  ctx.fillText(m.cn, W/2, 1780);
+  ctx.shadowBlur = 0;
+
+  // English name
+  ctx.font = 'italic 400 76px "Cormorant Garamond", serif';
+  ctx.fillStyle = '#ede4cd';
+  ctx.fillText(m.en, W/2, 1880);
+
+  // Window meta
+  const startH = String(Math.floor(m.start)).padStart(2,'0');
+  const endHr = m.end > 24 ? m.end - 24 : m.end;
+  const endH = String(Math.floor(endHr)).padStart(2,'0');
+  ctx.font = '400 22px "Fraunces", "Cormorant Garamond", serif';
+  ctx.fillStyle = 'rgba(237,228,205,0.5)';
+  ctx.fillText(`${startH}:00   —   ${endH}:00      ·      ${m.element.toUpperCase()}      ·      ${m.mode.toUpperCase()}`, W/2, 1940);
+
+  // Intent quote (italic, wrap)
+  ctx.font = 'italic 400 46px "Cormorant Garamond", serif';
+  ctx.fillStyle = 'rgba(237,228,205,0.82)';
+  wrapTextCanvas(ctx, `"${m.intent}"`, W/2, 2080, 880, 64);
+
+  // Bottom branding
+  ctx.font = 'italic 400 20px "Cormorant Garamond", serif';
+  ctx.fillStyle = 'rgba(237,228,205,0.32)';
+  ctx.fillText('a tcm nap clock', W/2, 2270);
+
+  // Export
+  canvas.toBlob(async (blob) => {
+    if (!blob) {
+      showToast('Wallpaper generation failed.');
+      return;
+    }
+    const fileName = `meridian-${m.en.toLowerCase().replace(/\s+/g,'-')}.png`;
+
+    if (navigator.canShare) {
+      const file = new File([blob], fileName, { type: 'image/png' });
+      if (navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: `經絡 ${m.cn} · ${m.en}`,
+            text: `"${m.intent}"`
+          });
+          showToast('Shared.');
+          return;
+        } catch (e) {
+          // fall through to download
+        }
+      }
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast('Wallpaper saved.');
+  }, 'image/png', 0.95);
+}
+
+// ==================== PWA INSTALL ====================
+let deferredPrompt = null;
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (!isStandalone && !sessionStorage.getItem('installDismissed')) {
+    setTimeout(() => document.getElementById('installPill').classList.add('show'), 4000);
+  }
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installPill').classList.remove('show');
+  showToast('Installed. Find Meridian on your home screen.');
+  deferredPrompt = null;
+});
+
+// ==================== SERVICE WORKER ====================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {
+      // SW failed (likely loaded from file://). App still works.
+    });
+  });
+}
+
+// ==================== INIT ====================
+document.addEventListener('DOMContentLoaded', () => {
+  buildClock();
+  update();
+  setInterval(update, 1000);
+
+  document.getElementById('startBtn').addEventListener('click', () => {
+    if (currentMeridian && currentMeridian.duration > 0) startSession(currentMeridian);
+  });
+  document.getElementById('microBtn').addEventListener('click', () => {
+    if (currentMeridian) startMicroSession(currentMeridian);
+  });
+  document.getElementById('endBtn').addEventListener('click', () => endSession(false));
+  document.getElementById('soundBtn').addEventListener('click', toggleSound);
+  document.getElementById('wallpaperBtn').addEventListener('click', generateWallpaper);
+
+  document.getElementById('aboutBtn').addEventListener('click', () => {
+    document.getElementById('about').classList.add('active');
+  });
+  document.getElementById('aboutClose').addEventListener('click', () => {
+    document.getElementById('about').classList.remove('active');
+  });
+  document.getElementById('about').addEventListener('click', (e) => {
+    if (e.target.id === 'about') {
+      document.getElementById('about').classList.remove('active');
+    }
+  });
+
+  // Install
+  const installPill = document.getElementById('installPill');
+  document.getElementById('installBtn').addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        installPill.classList.remove('show');
+      }
+      deferredPrompt = null;
+    } else if (isIOS) {
+      document.getElementById('iosHelp').classList.add('active');
+    }
+  });
+  document.getElementById('installClose').addEventListener('click', () => {
+    installPill.classList.remove('show');
+    sessionStorage.setItem('installDismissed', '1');
+  });
+  document.getElementById('iosHelpClose').addEventListener('click', () => {
+    document.getElementById('iosHelp').classList.remove('active');
+  });
+  document.getElementById('iosHelp').addEventListener('click', (e) => {
+    if (e.target.id === 'iosHelp') {
+      document.getElementById('iosHelp').classList.remove('active');
+    }
+  });
+
+  // iOS: show install pill after a delay if not already on home screen
+  if (isIOS && !isStandalone && !sessionStorage.getItem('installDismissed')) {
+    setTimeout(() => installPill.classList.add('show'), 5000);
+  }
+});
+</script>
+</body>
+</html>
