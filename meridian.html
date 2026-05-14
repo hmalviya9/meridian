@@ -1153,6 +1153,239 @@ footer em {
   border-color: var(--element-soft);
 }
 
+/* MOVEMENT (TAI CHI) PANEL — slides from right, similar to daymap/journal */
+.movement-panel {
+  position: fixed;
+  top: 0; right: 0;
+  bottom: 0;
+  width: 620px;
+  max-width: 100vw;
+  z-index: 180;
+  background: linear-gradient(180deg, var(--ink-2) 0%, var(--ink) 100%);
+  border-left: 0.5px solid var(--cream-faint);
+  padding: 56px 40px 48px;
+  transform: translateX(100%);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  box-shadow: -30px 0 80px rgba(0,0,0,0.6), 0 0 60px var(--element-glow);
+}
+.movement-panel.active { transform: translateX(0); }
+.movement-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(12,11,17,0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 170;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.movement-backdrop.active { opacity: 1; pointer-events: auto; }
+
+.move-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.move-cn {
+  font-family: var(--font-cn);
+  font-size: 64px;
+  font-weight: 500;
+  color: var(--element);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-shadow: 0 0 50px var(--element-glow);
+}
+.move-romaji {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--cream-dim);
+  letter-spacing: 0.18em;
+  margin: 8px 0 4px;
+  text-transform: lowercase;
+}
+.move-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 28px;
+  color: var(--cream);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+.move-tradition {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 6px 16px;
+  border: 0.5px solid var(--element-soft);
+  background: var(--element-glow);
+  color: var(--element);
+  font-family: var(--font-body);
+  font-size: 9.5px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.move-meta {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 18px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--cream-dim);
+}
+.move-meta .sep {
+  color: var(--cream-faint);
+}
+.move-benefits {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--cream-dim);
+  text-align: center;
+  margin: 28px auto;
+  max-width: 480px;
+  padding: 0 8px;
+}
+.move-section-title {
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--cream-faint);
+  text-align: center;
+  margin: 36px 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.move-section-title::before, .move-section-title::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: var(--cream-faint);
+}
+.move-steps {
+  list-style: none;
+  counter-reset: step;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.move-step {
+  position: relative;
+  padding-left: 56px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--cream);
+  font-weight: 400;
+  counter-increment: step;
+}
+.move-step::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0; top: 1px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 19px;
+  color: var(--element);
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+}
+.move-video-wrap {
+  margin: 14px auto 0;
+  max-width: 540px;
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  border: 0.5px solid var(--cream-faint);
+  background: rgba(0,0,0,0.4);
+}
+.move-video-wrap iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.move-video-note {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--cream-faint);
+  text-align: center;
+  margin-top: 12px;
+  letter-spacing: 0.04em;
+}
+.move-links {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+.move-link {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 12.5px;
+  color: var(--cream-dim);
+  letter-spacing: 0.16em;
+  background: transparent;
+  border: 0.5px solid var(--cream-faint);
+  padding: 12px 22px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.move-link:hover {
+  color: var(--element);
+  border-color: var(--element-soft);
+  letter-spacing: 0.22em;
+}
+
+/* Movement button on main page + in detail panel */
+.btn-movement {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: var(--cream);
+  background: transparent;
+  border: 0.5px solid var(--cream-faint);
+  padding: 14px 28px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: -4px;
+}
+.btn-movement:hover:not(:disabled) {
+  border-color: var(--element-soft);
+  color: var(--element);
+}
+.btn-movement .cn {
+  font-family: var(--font-cn);
+  font-size: 17px;
+  color: var(--element);
+  letter-spacing: 0.05em;
+  font-style: normal;
+  font-weight: 500;
+}
+.btn-movement .arrow {
+  opacity: 0.5;
+  font-style: normal;
+}
+
 @keyframes affirmIn {
   to { opacity: 1; }
 }
@@ -1492,6 +1725,15 @@ footer em {
   .panel-title { font-size: 22px; }
   .heatmap { gap: 4px; }
   .heat-cell .heat-date { font-size: 7px; }
+  .movement-panel { padding: 44px 20px 32px; width: 100vw; }
+  .move-cn { font-size: 52px; }
+  .move-name { font-size: 23px; }
+  .move-romaji { font-size: 14px; }
+  .move-benefits { font-size: 15.5px; }
+  .move-step { font-size: 16px; padding-left: 46px; }
+  .move-step::before { font-size: 17px; }
+  .btn-movement { font-size: 12px; padding: 12px 20px; }
+  .btn-movement .cn { font-size: 15px; }
 }
 </style>
 </head>
@@ -1639,6 +1881,13 @@ footer em {
       <div class="panel-sub">a quiet record of the small rituals</div>
     </div>
     <div id="journalContent"></div>
+  </aside>
+
+  <!-- MOVEMENT (TAI CHI) PANEL -->
+  <div class="movement-backdrop" id="movementBackdrop"></div>
+  <aside class="movement-panel" id="movementPanel">
+    <button class="panel-close" id="movementClose" aria-label="Close">×</button>
+    <div id="movementContent"></div>
   </aside>
 
   <footer class="fade-in d4">
@@ -2019,6 +2268,23 @@ function applyMeridian(m) {
     <button class="learn-more" id="learnMoreBtn">about the ${m.en.toLowerCase()} window  →</button>
   `;
   document.getElementById('learnMoreBtn').addEventListener('click', () => openDetail(m));
+
+  // Movement (Tai Chi / Qigong) button — added/removed depending on window
+  let moveBtn = document.getElementById('movementBtn');
+  const tech = TAI_CHI[m.cn];
+  if (tech) {
+    if (!moveBtn) {
+      moveBtn = document.createElement('button');
+      moveBtn.id = 'movementBtn';
+      moveBtn.className = 'btn-movement';
+      const microBtn = document.getElementById('microBtn');
+      microBtn.parentNode.insertBefore(moveBtn, microBtn.nextSibling);
+    }
+    moveBtn.innerHTML = `<span class="cn">${tech.cn}</span><span>${tech.name}</span><span class="arrow">→</span>`;
+    moveBtn.onclick = () => openMovement(m);
+  } else if (moveBtn) {
+    moveBtn.remove();
+  }
 
   // CTA
   const btn = document.getElementById('startBtn');
@@ -2494,6 +2760,259 @@ const AFFIRMATIONS = {
   '心包': { line: 'The armor, softened.',     meta: 'PERICARDIUM PRACTICE COMPLETE' }
 };
 
+// ==================== TAI CHI / QIGONG TECHNIQUES ====================
+// Mapped by organ (Chinese char). Eight movements drawn from Ba Duan Jin (Eight Pieces
+// of Brocade), Wu Qin Xi (Five Animals Qigong), and classical Tai Chi. Sleep and siesta
+// windows have no technique — rest is the practice.
+const TAI_CHI = {
+  '大腸': {
+    cn: '左右開弓',
+    romaji: 'zuǒ yòu kāi gōng',
+    name: 'Drawing the Bow to Shoot the Eagle',
+    tradition: 'Ba Duan Jin · The 2nd Brocade',
+    duration: '3 – 5 minutes',
+    benefits: 'Opens the chest, expands lung capacity, and stimulates the large intestine meridian which runs along the arms. The traditional morning awakening movement.',
+    steps: [
+      'Stand with feet shoulder-width apart. Sink the knees gently, as if sitting on a tall stool.',
+      'Cross your wrists in front of the chest — left over right, palms facing you.',
+      'Inhale. Extend the left arm to the left side, index finger and thumb forming an "L" shape pointing up, as if holding a bow.',
+      'Simultaneously the right hand pulls back to the right shoulder in a loose fist, as if drawing the bowstring.',
+      'Turn the head to the left, gazing along the imagined arrow toward the horizon.',
+      'Hold for one full breath, feeling the chest expand and the back muscles engage.',
+      'Exhale. Return both hands to the crossed position at center.',
+      'Switch sides. Repeat 3 times to each side, slowly.'
+    ],
+    videoId: '3K-0JpiJu-o',
+    videoNote: 'Mimi Kuo-Deemer — filmed in Beijing, 2014. Full 8 Brocades sequence; Drawing the Bow comes second.',
+    searchQuery: 'ba duan jin drawing the bow tutorial'
+  },
+
+  '胃': {
+    cn: '調理脾胃',
+    romaji: 'tiáo lǐ pí wèi',
+    name: 'Separate Heaven and Earth',
+    tradition: 'Ba Duan Jin · The 3rd Brocade',
+    duration: '3 – 4 minutes',
+    benefits: 'Balances the stomach and spleen — the body\u2019s digestion. One hand pushes to the sky, the other to the earth, stretching the entire torso and gently massaging the digestive organs.',
+    steps: [
+      'Stand with feet shoulder-width apart, knees soft, spine long.',
+      'Bring both hands to the navel, palms facing up, as if holding a small bowl at the belly.',
+      'Inhale slowly. The left hand turns up and lifts above the head — palm facing the sky, fingers pointing right.',
+      'At the same time the right hand turns down and presses toward the earth — palm down, fingers pointing forward.',
+      'Both arms reach full extension. Feel the body lengthen between sky and ground.',
+      'Hold for one slow breath.',
+      'Exhale. Both hands return to the navel, palms up.',
+      'Switch sides. Repeat 3 times to each side.'
+    ],
+    videoId: '3K-0JpiJu-o',
+    videoNote: 'Mimi Kuo-Deemer\u2019s full sequence — Separate Heaven and Earth is the third movement.',
+    searchQuery: 'ba duan jin separate heaven and earth tutorial'
+  },
+
+  '脾': {
+    cn: '五勞七傷往後瞧',
+    romaji: 'wǔ láo qī shāng',
+    name: 'Wise Owl Gazes Backward',
+    tradition: 'Ba Duan Jin · The 4th Brocade',
+    duration: '2 – 3 minutes',
+    benefits: 'Releases the neck and shoulders from morning desk work. The gentle rotation also nourishes the spleen meridian which travels along the side body.',
+    steps: [
+      'Stand tall, feet shoulder-width apart, arms relaxed at your sides.',
+      'Open the palms outward, fingers softly extended, presenting them gently.',
+      'Inhale slowly. Turn the head to the left, gazing back over your left shoulder.',
+      'Let the eyes lead — gaze leads head, head leads spine. Keep shoulders soft.',
+      'Hold for two breaths. Feel the gentle stretch across the front of the neck and chest.',
+      'Exhale. Return the head to center, eyes forward.',
+      'Repeat to the right side.',
+      'Do 3 turns to each side, alternating slowly.'
+    ],
+    videoId: '3K-0JpiJu-o',
+    videoNote: 'Full Ba Duan Jin sequence — the Wise Owl movement is the fourth.',
+    searchQuery: 'ba duan jin wise owl looks behind tutorial'
+  },
+
+  '心': {
+    cn: '搖頭擺尾去心火',
+    romaji: 'yáo tóu bǎi wěi',
+    name: 'Sway Head and Wag Tail',
+    tradition: 'Ba Duan Jin · The 5th Brocade · clears heart fire',
+    duration: '4 – 5 minutes',
+    benefits: 'Traditionally said to release excess heart fire — the agitation that builds by midday. Gentle waist circles cool the chest and settle the mind before lunch.',
+    steps: [
+      'Step the feet wider than shoulder-width. Sink into a deeper horse stance, thighs roughly parallel to the floor (or as low as is comfortable).',
+      'Place both hands on the thighs, just above the knees, fingertips pointing inward.',
+      'Inhale. Shift the upper body to the left, then arc the torso forward and down.',
+      'At the lowest point, the head and tailbone are both heavy and relaxed.',
+      'Exhale. Continue the arc — sweep the torso to the right side, then upright.',
+      'The motion is one continuous circle, like stirring a great pot slowly.',
+      'Keep the head soft and let it sway with the body — never forced.',
+      'Do 3 full circles in one direction, then 3 in the other.'
+    ],
+    videoId: '3K-0JpiJu-o',
+    videoNote: 'Full sequence — Sway Head and Wag Tail clears the midday heart fire.',
+    searchQuery: 'ba duan jin sway head wag tail heart fire'
+  },
+
+  '膀胱': {
+    cn: '兩手攀足',
+    romaji: 'liǎng shǒu pān zú',
+    name: 'Two Hands Hold the Feet',
+    tradition: 'Ba Duan Jin · The 6th Brocade',
+    duration: '3 – 4 minutes',
+    benefits: 'Stretches the entire bladder meridian — which runs down the back of the body from head to heels. Releases the afternoon stiffness that builds from long sitting.',
+    steps: [
+      'Stand with feet together or hip-width apart, knees slightly soft.',
+      'Inhale. Raise both arms overhead, palms facing forward, spine long.',
+      'Lean back gently, opening the chest. Look up only if comfortable for the neck.',
+      'Exhale slowly. Fold forward from the hips, arms reaching toward the floor.',
+      'Let the head be heavy. Hands slide down the back of the legs to wherever they reach — calves, ankles, or feet. No need to force.',
+      'Inhale at the bottom of the fold. Feel the long stretch down the back of the body.',
+      'Exhale and roll up slowly, one vertebra at a time, hands tracing up the front of the legs.',
+      'Pause standing for one breath. Repeat 6 times.'
+    ],
+    videoId: '3K-0JpiJu-o',
+    videoNote: 'Full Ba Duan Jin — Two Hands Hold Feet, the afternoon back release.',
+    searchQuery: 'ba duan jin two hands hold feet kidney waist'
+  },
+
+  '腎': {
+    cn: '鹿抵',
+    romaji: 'lù dǐ',
+    name: 'Deer Colliding Antlers',
+    tradition: 'Wu Qin Xi · Five Animals · Deer',
+    duration: '4 – 5 minutes',
+    benefits: 'The deer form is specifically for the kidneys. Twisting the torso compresses and releases each kidney in turn, while the calm grace of the deer nourishes the will (zhi), which the kidneys are said to house.',
+    steps: [
+      'Stand with feet shoulder-width apart. Form "deer antlers" with each hand — extend index and pinky fingers, fold the middle two in with the thumb resting on them.',
+      'Step the right foot forward into a gentle bow stance, right knee softly bent, back leg extended.',
+      'Inhale. Raise both "antlers" up and forward, then arc them up and over to the right side.',
+      'As the antlers travel right, twist the torso right. The body curves into a soft "C" shape.',
+      'Gaze back along the body line — toward your rear (left) heel.',
+      'Hold for one breath. One kidney compresses gently, the other opens.',
+      'Exhale. Return to center, hands lowering.',
+      'Step back. Switch sides. Repeat 3 times each side, slowly, with the calm of a deer.'
+    ],
+    videoId: null,
+    videoNote: 'No featured video — browse below for instruction videos by reputable Qigong teachers.',
+    searchQuery: 'wu qin xi deer colliding antlers tutorial five animals qigong'
+  },
+
+  '心包': {
+    cn: '雲手',
+    romaji: 'yún shǒu',
+    name: 'Cloud Hands',
+    tradition: 'Tai Chi · Classical 24-Form',
+    duration: '5 – 10 minutes',
+    benefits: 'The most heart-soothing movement in Tai Chi. The continuous circular motion softens the pericardium\u2019s armor — the protective sheath around the heart — and calms the shen (spirit) before evening rest.',
+    steps: [
+      'Stand with feet shoulder-width apart, knees slightly bent. Weight even between both feet.',
+      'Raise the left hand to chest height, palm facing you, as if holding a soft ball at your chest.',
+      'The right hand drops to waist height, palm facing up, as if holding a small bowl.',
+      'Slowly shift weight to the right foot. As you shift, the waist turns gently to the right.',
+      'The hands trace soft arcs — the upper (left) hand sweeps right and downward, the lower (right) hand rises up to chest level.',
+      'When weight is fully on the right, the hands have switched positions.',
+      'Reverse direction: shift weight to the left, waist turns left, hands sweep through soft arcs again.',
+      'Move continuously, like drifting clouds. Let the waist lead — the arms only follow.',
+      'Continue for 5 to 10 minutes. The mind grows quiet without effort.'
+    ],
+    videoId: 'jGTFq5yaAwU',
+    videoNote: 'A clear English-language tutorial for Yun Shou — slow, beginner-friendly.',
+    searchQuery: 'tai chi cloud hands yun shou tutorial'
+  },
+
+  '三焦': {
+    cn: '兩手托天',
+    romaji: 'liǎng shǒu tuō tiān',
+    name: 'Hold Up the Heavens',
+    tradition: 'Ba Duan Jin · The 1st Brocade',
+    duration: '3 – 4 minutes',
+    benefits: 'The opening movement of the Eight Brocades, traditionally said to harmonize the Triple Burner — the body\u2019s whole-system thermostat. Calms and lengthens the body in preparation for sleep.',
+    steps: [
+      'Stand tall, feet shoulder-width apart. Arms hanging naturally at your sides.',
+      'Bring both hands to the lower belly, palms facing up, fingertips nearly touching.',
+      'Inhale slowly. Lift the hands in front of the body, palms up, as if lifting a great weight.',
+      'When the hands reach chest height, rotate the palms — turning them to face the sky.',
+      'Continue lifting overhead. Press the palms toward the sky, fingers interlaced or palms turned up.',
+      'At full extension, gaze gently upward. Feel the spine lengthen. Hold for one slow breath.',
+      'Exhale. Release the hands, opening the arms wide. Let them descend in slow arcs to the sides, like falling petals.',
+      'Hands return to the lower belly. Repeat 6 times slowly.'
+    ],
+    videoId: '3K-0JpiJu-o',
+    videoNote: 'Mimi Kuo-Deemer\u2019s full sequence opens with Hold up the Heavens.',
+    searchQuery: 'ba duan jin hold up the heavens triple burner'
+  }
+};
+
+// ==================== MOVEMENT PANEL ====================
+function openMovement(meridian) {
+  const tech = TAI_CHI[meridian.cn];
+  if (!tech) return;
+  const el = ELEMENTS[meridian.element];
+
+  const panel = document.getElementById('movementPanel');
+  panel.style.setProperty('--element', el.color);
+  panel.style.setProperty('--element-soft', el.soft);
+  panel.style.setProperty('--element-glow', el.glow);
+
+  const stepsHtml = tech.steps.map(s => `<li class="move-step">${s}</li>`).join('');
+
+  const videoHtml = tech.videoId
+    ? `<div class="move-video-wrap">
+         <iframe src="https://www.youtube.com/embed/${tech.videoId}?rel=0&modestbranding=1"
+                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                 allowfullscreen
+                 loading="lazy"></iframe>
+       </div>
+       <div class="move-video-note">${tech.videoNote}</div>`
+    : `<div class="move-video-note">${tech.videoNote}</div>`;
+
+  const searchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(tech.searchQuery)}`;
+  const watchUrl = tech.videoId ? `https://www.youtube.com/watch?v=${tech.videoId}` : null;
+
+  document.getElementById('movementContent').innerHTML = `
+    <div class="move-header">
+      <div class="move-cn" style="color: ${el.color}">${tech.cn}</div>
+      <div class="move-romaji">${tech.romaji}</div>
+      <div class="move-name">${tech.name}</div>
+      <div class="move-tradition">${tech.tradition}</div>
+      <div class="move-meta">
+        <span>${meridian.cn} · ${meridian.en} window</span>
+        <span class="sep">·</span>
+        <span>${tech.duration}</span>
+      </div>
+    </div>
+
+    <div class="move-benefits">${tech.benefits}</div>
+
+    <div class="move-section-title">the movement</div>
+    <ol class="move-steps">${stepsHtml}</ol>
+
+    <div class="move-section-title">watch &amp; learn</div>
+    ${videoHtml}
+    <div class="move-links">
+      ${watchUrl ? `<a class="move-link" href="${watchUrl}" target="_blank" rel="noopener">open on youtube  ↗</a>` : ''}
+      <a class="move-link" href="${searchUrl}" target="_blank" rel="noopener">more videos  ↗</a>
+    </div>
+  `;
+
+  document.getElementById('movementBackdrop').classList.add('active');
+  panel.classList.add('active');
+}
+
+function closeMovement() {
+  document.getElementById('movementBackdrop').classList.remove('active');
+  document.getElementById('movementPanel').classList.remove('active');
+  // Stop the iframe by clearing src (otherwise video keeps playing in background)
+  setTimeout(() => {
+    const iframe = document.querySelector('#movementContent iframe');
+    if (iframe) {
+      const src = iframe.src;
+      iframe.src = '';
+      // optional: iframe.src = src; if user reopens
+    }
+  }, 700);
+}
+
 // ==================== ONBOARDING ====================
 const ONBOARDING = [
   {
@@ -2622,6 +3141,20 @@ function openDetail(meridian) {
     else until = `in ${hh}h ${mm}m`;
     status.textContent = `This window opens ${until}.`;
     status.classList.add('future');
+  }
+
+  // Movement (Tai Chi) button — added if technique exists for this organ.
+  // Works for both current and future windows (since it's educational, not time-locked).
+  const tech = TAI_CHI[meridian.cn];
+  if (tech) {
+    const moveBtn = document.createElement('button');
+    moveBtn.className = 'btn-movement';
+    moveBtn.innerHTML = `<span class="cn">${tech.cn}</span><span>${tech.name}</span><span class="arrow">→</span>`;
+    moveBtn.addEventListener('click', () => {
+      closeDetail();
+      setTimeout(() => openMovement(meridian), 350);
+    });
+    actions.appendChild(moveBtn);
   }
 
   document.getElementById('detailBackdrop').classList.add('active');
@@ -3079,6 +3612,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('daymapBackdrop').addEventListener('click', closeDayMap);
   document.getElementById('journalClose').addEventListener('click', closeJournal);
   document.getElementById('journalBackdrop').addEventListener('click', closeJournal);
+  document.getElementById('movementClose').addEventListener('click', closeMovement);
+  document.getElementById('movementBackdrop').addEventListener('click', closeMovement);
 
   document.getElementById('aboutBtn').addEventListener('click', () => {
     document.getElementById('about').classList.add('active');
@@ -3145,6 +3680,7 @@ document.addEventListener('DOMContentLoaded', () => {
       closeAffirmation();
       closeDayMap();
       closeJournal();
+      closeMovement();
       document.getElementById('about').classList.remove('active');
       document.getElementById('iosHelp').classList.remove('active');
     }

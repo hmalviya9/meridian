@@ -24,6 +24,7 @@ You only need to deploy the first 7 files. `meridian.html` is just there as a fa
 - **Tappable segments** — every segment is a large invisible hit zone for mobile. Tap any organ to read what it governs in TCM, what the window invites, and where it sits in the rhythm of a day. Full educational content for all twelve organs.
 - **Full Yoga Nidra session** — 8 to 18 minutes during nap-able windows, with paced breathing and rotating body-rotation prompts.
 - **60-second check-in** — works at every hour, including the sleep windows. A single sentence + three breaths.
+- **Tai Chi / Qigong techniques** — eight movements mapped to the eight non-sleep windows, drawn from Ba Duan Jin (the Eight Pieces of Brocade), Wu Qin Xi (Five Animals Qigong), and classical Tai Chi. Each comes with the Chinese name, pinyin, tradition, benefits, step-by-step instructions, an embedded YouTube tutorial, and a search-more link.
 - **Affirmation on completion** — when a full session finishes, a quiet "the heart, met" card closes the practice emotionally.
 - **Today view** — opens a vertical timeline of all 12 windows for the day, current one glowing. Tap any row for the detail panel.
 - **Practice journal** — every completed session logs to localStorage. The journal shows stats, a 14-day heatmap, and recent practices, with no cloud, no account, no tracking.
