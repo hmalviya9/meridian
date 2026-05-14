@@ -20,9 +20,14 @@ You only need to deploy the first 7 files. `meridian.html` is just there as a fa
 ## What's inside
 
 - **Live meridian clock** — 12-segment radial dial that highlights the current TCM organ and retunes the whole interface to its associated element.
+- **First-visit onboarding** — four ceremonial cards introducing the concept, shown once per device.
+- **Tappable segments** — every segment is a large invisible hit zone for mobile. Tap any organ to read what it governs in TCM, what the window invites, and where it sits in the rhythm of a day. Full educational content for all twelve organs.
 - **Full Yoga Nidra session** — 8 to 18 minutes during nap-able windows, with paced breathing and rotating body-rotation prompts.
 - **60-second check-in** — works at every hour, including the sleep windows. A single sentence + three breaths.
-- **Wallpaper export** — generates a 1080×2340 PNG of the current state. On mobile, uses the Web Share API so the user can send it straight to wallpaper, Messages, or Instagram. On desktop, downloads as PNG.
+- **Affirmation on completion** — when a full session finishes, a quiet "the heart, met" card closes the practice emotionally.
+- **Today view** — opens a vertical timeline of all 12 windows for the day, current one glowing. Tap any row for the detail panel.
+- **Practice journal** — every completed session logs to localStorage. The journal shows stats, a 14-day heatmap, and recent practices, with no cloud, no account, no tracking.
+- **Wallpaper export** — generates a 1080×2340 PNG of the current state. On mobile, opens the share sheet so the user can set it as wallpaper or post it.
 - **Optional ambient drone** — Tone.js sine drone tuned to the Chinese pentatonic note for the current element.
 - **Installable** — install prompt on Chrome/Edge/Android, custom Safari "Add to Home Screen" instructions on iOS.
 - **Offline-first** — service worker caches the shell, so the app works without network after first load.
