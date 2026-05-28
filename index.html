@@ -25,10 +25,11 @@
 :root {
   --ink: #0c0b11;
   --ink-2: #14121c;
-  --cream: #ede4cd;
-  --cream-dim: rgba(237,228,205,0.62);
-  --cream-faint: rgba(237,228,205,0.18);
-  --cream-ghost: rgba(237,228,205,0.08);
+  --cream: #f0e8d4;
+  --cream-dim: rgba(240,232,212,0.82);
+  --cream-faint: rgba(240,232,212,0.20);
+  --cream-ghost: rgba(240,232,212,0.14);
+  --label: rgba(240,232,212,0.60);
   --element: #ede4cd;
   --element-soft: rgba(237,228,205,0.5);
   --element-glow: rgba(237,228,205,0.12);
@@ -45,7 +46,7 @@ html, body {
   background: var(--ink);
   color: var(--cream);
   font-family: var(--font-body);
-  font-weight: 300;
+  font-weight: 400;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -172,8 +173,8 @@ main {
 
 .en-label {
   font-family: var(--font-display);
-  font-size: 6px;
-  fill: var(--cream-faint);
+  font-size: 7px;
+  fill: var(--label);
   text-anchor: middle;
   dominant-baseline: central;
   letter-spacing: 0.25em;
@@ -197,8 +198,8 @@ main {
 .cardinal {
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 9px;
-  fill: var(--cream-faint);
+  font-size: 10px;
+  fill: var(--label);
   letter-spacing: 0.2em;
   text-anchor: middle;
   dominant-baseline: central;
@@ -222,7 +223,7 @@ main {
 }
 .center-label {
   font-family: var(--font-display);
-  fill: var(--cream-faint);
+  fill: var(--label);
   text-anchor: middle;
   font-size: 8px;
   letter-spacing: 0.5em;
@@ -300,7 +301,7 @@ main {
   font-size: 10.5px;
   letter-spacing: 0.36em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
   font-weight: 400;
 }
 
@@ -332,7 +333,7 @@ main {
   font-family: var(--font-display);
   font-style: italic;
   font-size: 12.5px;
-  color: var(--cream-faint);
+  color: var(--label);
   letter-spacing: 0.2em;
   cursor: pointer;
   padding: 8px 14px;
@@ -388,7 +389,7 @@ main {
   font-weight: 400;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -418,7 +419,7 @@ main {
 }
 .btn-micro::before, .btn-micro::after {
   content: '—';
-  color: var(--cream-faint);
+  color: var(--label);
   margin: 0 10px;
   transition: color 0.4s ease;
 }
@@ -469,7 +470,7 @@ main {
 }
 .install-pill .close {
   border: none;
-  color: var(--cream-faint);
+  color: var(--label);
   padding: 4px 8px;
   font-size: 18px;
   letter-spacing: 0;
@@ -575,10 +576,10 @@ footer {
 }
 footer .small {
   font-family: var(--font-body);
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
   font-weight: 400;
 }
 footer em {
@@ -642,7 +643,7 @@ footer em {
   font-style: italic;
   font-size: 13px;
   letter-spacing: 0.34em;
-  color: var(--cream-faint);
+  color: var(--label);
   font-variant-numeric: tabular-nums;
   text-transform: uppercase;
 }
@@ -714,7 +715,7 @@ footer em {
   font-size: 10.5px;
   letter-spacing: 0.42em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -836,7 +837,7 @@ footer em {
   top: 16px; right: 18px;
   background: transparent;
   border: none;
-  color: var(--cream-faint);
+  color: var(--label);
   font-size: 22px;
   cursor: pointer;
   padding: 8px 12px;
@@ -892,10 +893,10 @@ footer em {
 }
 .detail-row .label {
   font-family: var(--font-body);
-  font-size: 9.5px;
+  font-size: 10.5px;
   letter-spacing: 0.36em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
 }
 .detail-row .value {
   font-family: var(--font-display);
@@ -1061,7 +1062,7 @@ footer em {
   border: none;
   padding: 14px 16px;
   font-size: 10px;
-  color: var(--cream-faint);
+  color: var(--label);
   letter-spacing: 0.28em;
 }
 .onboard-skip:hover { color: var(--cream-dim); }
@@ -1127,7 +1128,7 @@ footer em {
   font-size: 11px;
   letter-spacing: 0.36em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
   opacity: 0;
   animation: affirmIn 2s ease-out 2.4s forwards;
   margin-top: 8px;
@@ -1220,7 +1221,7 @@ footer em {
   background: var(--element-glow);
   color: var(--element);
   font-family: var(--font-body);
-  font-size: 9.5px;
+  font-size: 10.5px;
   letter-spacing: 0.36em;
   text-transform: uppercase;
   font-weight: 500;
@@ -1237,7 +1238,7 @@ footer em {
   color: var(--cream-dim);
 }
 .move-meta .sep {
-  color: var(--cream-faint);
+  color: var(--label);
 }
 .move-benefits {
   font-family: var(--font-display);
@@ -1255,7 +1256,7 @@ footer em {
   font-size: 10px;
   letter-spacing: 0.42em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
   text-align: center;
   margin: 36px 0 18px;
   display: flex;
@@ -1317,7 +1318,7 @@ footer em {
   font-family: var(--font-display);
   font-style: italic;
   font-size: 12px;
-  color: var(--cream-faint);
+  color: var(--label);
   text-align: center;
   margin-top: 12px;
   letter-spacing: 0.04em;
@@ -1386,6 +1387,296 @@ footer em {
   font-style: normal;
 }
 
+/* ELEMENT QUIZ — full-screen flow */
+.quiz {
+  position: fixed; inset: 0;
+  z-index: 250;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+  overflow-y: auto;
+}
+.quiz.active { opacity: 1; pointer-events: auto; }
+.quiz::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 32%, var(--element-glow), transparent 60%);
+  pointer-events: none;
+  transition: background 1.2s ease;
+}
+.quiz::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+.quiz-inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 580px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Intro */
+.quiz-elements {
+  font-family: var(--font-cn);
+  font-size: 40px;
+  letter-spacing: 0.4em;
+  color: var(--label);
+  margin-bottom: 40px;
+  padding-left: 0.4em;
+}
+.quiz-intro-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 44px;
+  color: var(--cream);
+  font-weight: 400;
+  margin-bottom: 22px;
+}
+.quiz-intro-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--cream-dim);
+  max-width: 400px;
+  margin-bottom: 44px;
+}
+.quiz-begin {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: transparent;
+  border: 0.5px solid var(--cream-faint);
+  padding: 18px 48px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+.quiz-begin:hover {
+  border-color: var(--element-soft);
+  color: var(--element);
+  letter-spacing: 0.42em;
+}
+.quiz-skip {
+  margin-top: 20px;
+  background: transparent;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--label);
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.3s ease;
+}
+.quiz-skip:hover { color: var(--cream-dim); }
+
+/* Progress dots */
+.quiz-progress {
+  display: flex;
+  gap: 9px;
+  justify-content: center;
+  margin-bottom: 44px;
+}
+.quiz-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cream-faint);
+  transition: background 0.4s ease, transform 0.4s ease;
+}
+.quiz-dot.done { background: var(--element-soft); }
+.quiz-dot.current { background: var(--element); transform: scale(1.5); }
+
+/* Question */
+.quiz-question {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 30px;
+  line-height: 1.4;
+  color: var(--cream);
+  margin-bottom: 40px;
+  max-width: 480px;
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+}
+.quiz-option {
+  font-family: var(--font-display);
+  font-size: 19px;
+  color: var(--cream-dim);
+  background: rgba(237,228,205,0.025);
+  border: 0.5px solid var(--cream-faint);
+  padding: 20px 26px;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  text-align: left;
+  line-height: 1.4;
+}
+.quiz-option:hover {
+  background: var(--element-glow);
+  border-color: var(--element-soft);
+  color: var(--cream);
+  transform: translateX(4px);
+}
+.quiz-option.chosen {
+  background: var(--element-glow);
+  border-color: var(--element);
+  color: var(--element);
+}
+
+/* Result */
+.quiz-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.result-cn {
+  font-family: var(--font-cn);
+  font-size: 130px;
+  font-weight: 500;
+  color: var(--element);
+  line-height: 1;
+  text-shadow: 0 0 60px var(--element-glow);
+  margin-bottom: 8px;
+}
+.result-you-are {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  margin-bottom: 6px;
+}
+.result-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 52px;
+  color: var(--cream);
+  font-weight: 400;
+  line-height: 1.1;
+}
+.result-archetype {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 24px;
+  color: var(--element);
+  margin-top: 4px;
+  margin-bottom: 28px;
+}
+.result-desc {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--cream-dim);
+  max-width: 460px;
+  margin-bottom: 32px;
+}
+.result-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: 36px;
+}
+.result-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.result-row .label {
+  font-family: var(--font-body);
+  font-size: 10.5px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--label);
+}
+.result-row .value {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 20px;
+  color: var(--cream);
+}
+.result-row .value.element-color { color: var(--element); }
+.result-divider {
+  width: 40px; height: 0.5px;
+  background: var(--cream-faint);
+  margin: 4px auto;
+}
+.result-secondary {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--label);
+  margin-bottom: 32px;
+}
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  width: 100%;
+}
+.result-share {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: transparent;
+  border: 0.5px solid var(--element-soft);
+  padding: 18px 40px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+.result-share:hover {
+  background: var(--element-glow);
+  color: var(--element);
+  letter-spacing: 0.4em;
+}
+.result-explore, .result-retake {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--cream-dim);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 14px;
+  transition: color 0.4s ease;
+}
+.result-explore:hover { color: var(--element); }
+.result-retake:hover { color: var(--cream); }
+
 @keyframes affirmIn {
   to { opacity: 1; }
 }
@@ -1426,7 +1717,7 @@ footer em {
   top: 18px; right: 22px;
   background: transparent;
   border: none;
-  color: var(--cream-faint);
+  color: var(--label);
   font-size: 22px;
   cursor: pointer;
   padding: 8px 12px;
@@ -1453,7 +1744,7 @@ footer em {
   font-size: 10.5px;
   letter-spacing: 0.36em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
   margin-top: 6px;
 }
 
@@ -1488,7 +1779,7 @@ footer em {
   margin-left: -10px;
   font-family: var(--font-display);
   font-style: italic;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.3em;
   color: var(--element);
   transform: translateX(-100%);
@@ -1531,10 +1822,10 @@ footer em {
 }
 .daymap-mode {
   font-family: var(--font-body);
-  font-size: 9.5px;
+  font-size: 10.5px;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
   text-align: right;
 }
 .daymap-row.now .daymap-mode { color: var(--element); }
@@ -1561,10 +1852,10 @@ footer em {
 }
 .stat-label {
   font-family: var(--font-body);
-  font-size: 9.5px;
+  font-size: 10.5px;
   letter-spacing: 0.36em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
   margin-top: 8px;
 }
 
@@ -1603,7 +1894,7 @@ footer em {
   font-family: var(--font-body);
   font-size: 8px;
   letter-spacing: 0.1em;
-  color: var(--cream-faint);
+  color: var(--label);
   white-space: nowrap;
 }
 .heatmap-row-spacer { height: 18px; }
@@ -1614,10 +1905,10 @@ footer em {
   gap: 6px;
   margin-top: 14px;
   font-family: var(--font-body);
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
 }
 .heatmap-legend .legend-cell {
   width: 10px; height: 10px;
@@ -1658,7 +1949,7 @@ footer em {
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
 }
 .recent-duration {
   font-family: var(--font-display);
@@ -1684,7 +1975,7 @@ footer em {
   font-size: 10px;
   letter-spacing: 0.36em;
   text-transform: uppercase;
-  color: var(--cream-faint);
+  color: var(--label);
   font-style: normal;
 }
 
@@ -1698,7 +1989,7 @@ footer em {
   .organ-cn { font-size: 50px; }
   .organ-en { font-size: 22px; }
   .organ-intent { font-size: 17px; }
-  .organ-meta { font-size: 9.5px; letter-spacing: 0.3em; gap: 10px; }
+  .organ-meta { font-size: 10.5px; letter-spacing: 0.3em; gap: 10px; }
   .btn-primary { font-size: 11px; letter-spacing: 0.28em; padding: 16px 32px; }
   .breath-wrap { width: 260px; height: 260px; }
   .guidance { font-size: 18px; bottom: 100px; }
@@ -1734,6 +2025,14 @@ footer em {
   .move-step::before { font-size: 17px; }
   .btn-movement { font-size: 12px; padding: 12px 20px; }
   .btn-movement .cn { font-size: 15px; }
+  .quiz-intro-title { font-size: 34px; }
+  .quiz-question { font-size: 24px; min-height: 72px; }
+  .quiz-option { font-size: 17px; padding: 17px 20px; }
+  .result-cn { font-size: 104px; }
+  .result-name { font-size: 42px; }
+  .result-archetype { font-size: 21px; }
+  .result-desc { font-size: 18px; }
+  .quiz-elements { font-size: 32px; }
 }
 </style>
 </head>
@@ -1761,6 +2060,7 @@ footer em {
       <button class="btn-primary" id="startBtn">— —</button>
       <button class="btn-micro" id="microBtn">60-second check-in</button>
       <div class="aux-controls">
+        <button class="btn-secondary" id="elementBtn">Your Element</button>
         <button class="btn-secondary" id="soundBtn">Sound · off</button>
         <button class="btn-secondary" id="dayMapBtn">Today</button>
         <button class="btn-secondary" id="journalBtn">Journal</button>
@@ -1889,6 +2189,11 @@ footer em {
     <button class="panel-close" id="movementClose" aria-label="Close">×</button>
     <div id="movementContent"></div>
   </aside>
+
+  <!-- ELEMENT QUIZ -->
+  <div class="quiz" id="quiz">
+    <div class="quiz-inner" id="quizInner"></div>
+  </div>
 
   <footer class="fade-in d4">
     <em>"Sleep is the practice when the body is at work."</em><br>
@@ -3013,6 +3318,420 @@ function closeMovement() {
   }, 700);
 }
 
+// ==================== ELEMENT QUIZ ====================
+// ↓↓↓ CHANGE THIS to your real domain once deployed — it gets baked into every
+// shared element card, so the screenshot carries people back to the app.
+const SHARE_URL = 'meridianclock.app';
+
+const QUIZ = [
+  { q: 'You have a free evening and no plans. You feel\u2026', options: [
+    { t: 'Restless — I should be doing something.', e: 'wood' },
+    { t: 'Like calling friends and going out.', e: 'fire' },
+    { t: 'Happiest cooking for or hosting someone.', e: 'earth' },
+    { t: 'Relieved — time to tidy and refine.', e: 'metal' },
+    { t: 'Grateful for the quiet and the solitude.', e: 'water' },
+  ]},
+  { q: 'Under real pressure, your first instinct is to\u2026', options: [
+    { t: 'Take charge and push straight through.', e: 'wood' },
+    { t: 'Rally people and keep spirits up.', e: 'fire' },
+    { t: 'Worry, and make sure everyone\u2019s okay.', e: 'earth' },
+    { t: 'Step back and find the right method.', e: 'metal' },
+    { t: 'Withdraw inward and conserve energy.', e: 'water' },
+  ]},
+  { q: 'Which compliment lands the deepest?', options: [
+    { t: '\u201cYou make things happen.\u201d', e: 'wood' },
+    { t: '\u201cYou light up every room.\u201d', e: 'fire' },
+    { t: '\u201cI always feel safe with you.\u201d', e: 'earth' },
+    { t: '\u201cYour standards are impeccable.\u201d', e: 'metal' },
+    { t: '\u201cYou see what others miss.\u201d', e: 'water' },
+  ]},
+  { q: 'Your relationship with rules and structure?', options: [
+    { t: 'Rules exist to be challenged.', e: 'wood' },
+    { t: 'I\u2019ll follow them if they\u2019re fun.', e: 'fire' },
+    { t: 'I keep the peace and go with the group.', e: 'earth' },
+    { t: 'Structure is freedom. I love a system.', e: 'metal' },
+    { t: 'I quietly make my own.', e: 'water' },
+  ]},
+  { q: 'The feeling you most need to watch in yourself?', options: [
+    { t: 'Frustration and impatience.', e: 'wood' },
+    { t: 'Restlessness and over-excitement.', e: 'fire' },
+    { t: 'Worry and over-giving.', e: 'earth' },
+    { t: 'Grief and holding on too long.', e: 'metal' },
+    { t: 'Fear and pulling away.', e: 'water' },
+  ]},
+  { q: 'Your ideal way to recharge?', options: [
+    { t: 'A hard workout or a bold new challenge.', e: 'wood' },
+    { t: 'A concert, a party, deep conversation.', e: 'fire' },
+    { t: 'A slow meal with people I love.', e: 'earth' },
+    { t: 'A clean room and a finished project.', e: 'metal' },
+    { t: 'A long bath, a book, total solitude.', e: 'water' },
+  ]},
+  { q: 'Which season feels most like you?', options: [
+    { t: 'Spring — everything bursting open.', e: 'wood' },
+    { t: 'Summer — peak warmth and light.', e: 'fire' },
+    { t: 'Late summer — the golden harvest.', e: 'earth' },
+    { t: 'Autumn — crisp, clear, letting go.', e: 'metal' },
+    { t: 'Winter — still, deep, conserving.', e: 'water' },
+  ]},
+  { q: 'At your very best, people would call you\u2026', options: [
+    { t: 'A visionary.', e: 'wood' },
+    { t: 'A spark.', e: 'fire' },
+    { t: 'An anchor.', e: 'earth' },
+    { t: 'A craftsman.', e: 'metal' },
+    { t: 'A sage.', e: 'water' },
+  ]},
+  { q: 'When a chapter ends — a job, a place, a love\u2026', options: [
+    { t: 'I\u2019m already onto the next thing.', e: 'wood' },
+    { t: 'I feel it intensely, then bounce back.', e: 'fire' },
+    { t: 'I worry about everyone affected.', e: 'earth' },
+    { t: 'I grieve properly, then let go cleanly.', e: 'metal' },
+    { t: 'I retreat to process it alone.', e: 'water' },
+  ]},
+];
+
+const ELEMENT_RESULTS = {
+  wood: {
+    cn: '木', name: 'Wood', archetype: 'The Pioneer',
+    desc: 'You move like spring — upward, outward, always toward what\u2019s next. Decisive and driven, you are happiest with a mountain to climb. Your gift is vision; your shadow is frustration when the world moves too slowly.',
+    organs: 'Liver & Gallbladder',
+    hours: '11PM – 3AM',
+    hoursNote: 'deep sleep is your renewal',
+    watch: 'anger · impatience',
+    practice: 'Protect your sleep fiercely. The Liver rebuilds you between 1 and 3 AM — going to bed before 11 is your real edge.'
+  },
+  fire: {
+    cn: '火', name: 'Fire', archetype: 'The Spark',
+    desc: 'You are summer in a person — warm, magnetic, alive. You light up rooms and connect people without trying. Your gift is joy; your shadow is a restlessness that can burn too hot and scatter you thin.',
+    organs: 'Heart & Small Intestine',
+    hours: '11AM – 1PM',
+    hoursNote: 'the Heart\u2019s peak',
+    watch: 'anxiety · over-excitement',
+    practice: 'Pause at midday. Sixty seconds with the heart cools your fire before it scatters into the afternoon.'
+  },
+  earth: {
+    cn: '土', name: 'Earth', archetype: 'The Anchor',
+    desc: 'You are the still center others orbit. Nurturing, loyal, and grounded, you hold things together and make people feel safe. Your gift is care; your shadow is worry, and giving until you are empty.',
+    organs: 'Spleen & Stomach',
+    hours: '7AM – 11AM',
+    hoursNote: 'digestion and grounding',
+    watch: 'worry · over-giving',
+    practice: 'Eat a warm breakfast and guard your mornings. Your whole day\u2019s energy is built between 7 and 11 AM.'
+  },
+  metal: {
+    cn: '金', name: 'Metal', archetype: 'The Craftsman',
+    desc: 'You move like autumn — clear, precise, refined. You see the essential and discard the rest. Your gift is discernment and quality; your shadow is grief, and holding on long past the time to let go.',
+    organs: 'Lung & Large Intestine',
+    hours: '3AM – 7AM',
+    hoursNote: 'the breath, the great release',
+    watch: 'grief · rigidity',
+    practice: 'Breathe deeply at dawn. Your lungs — and your capacity to release — are strongest before the sun is up.'
+  },
+  water: {
+    cn: '水', name: 'Water', archetype: 'The Sage',
+    desc: 'You are winter\u2019s depth — still, reflective, wise beyond your years. You conserve your energy and notice what others miss. Your gift is depth; your shadow is fear, and retreating too far inward.',
+    organs: 'Kidney & Bladder',
+    hours: '3PM – 7PM',
+    hoursNote: 'replenishing the deep reserves',
+    watch: 'fear · isolation',
+    practice: 'Rest in the late afternoon. Your reserves — your jing — refill between 3 and 7 PM. Don\u2019t spend what you can\u2019t replace.'
+  },
+};
+
+let quizState = { idx: 0, scores: {}, answers: [] };
+
+function openQuiz() {
+  quizState = { idx: 0, scores: { wood:0, fire:0, earth:0, metal:0, water:0 }, answers: [] };
+  document.getElementById('quiz').classList.add('active');
+  // Neutral element glow on intro
+  applyQuizTheme('fire');
+  renderQuizIntro();
+}
+
+function closeQuiz() {
+  document.getElementById('quiz').classList.remove('active');
+}
+
+function applyQuizTheme(element) {
+  const el = ELEMENTS[element];
+  const quiz = document.getElementById('quiz');
+  quiz.style.setProperty('--element', el.color);
+  quiz.style.setProperty('--element-soft', el.soft);
+  quiz.style.setProperty('--element-glow', el.glow);
+}
+
+function renderQuizIntro() {
+  const inner = document.getElementById('quizInner');
+  inner.innerHTML = `
+    <div class="quiz-elements">木 火 土 金 水</div>
+    <div class="quiz-intro-title">Discover your element</div>
+    <div class="quiz-intro-text">Five energies move through every body. One tends to lead. Nine questions to find which one is yours.</div>
+    <button class="quiz-begin" id="quizBeginBtn">Begin</button>
+    <button class="quiz-skip" id="quizSkipBtn">maybe later</button>
+  `;
+  document.getElementById('quizBeginBtn').addEventListener('click', () => {
+    quizState.idx = 0;
+    renderQuestion();
+  });
+  document.getElementById('quizSkipBtn').addEventListener('click', closeQuiz);
+}
+
+function renderQuestion() {
+  const inner = document.getElementById('quizInner');
+  const q = QUIZ[quizState.idx];
+
+  const dots = QUIZ.map((_, i) => {
+    let cls = 'quiz-dot';
+    if (i < quizState.idx) cls += ' done';
+    if (i === quizState.idx) cls += ' current';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+
+  const options = q.options.map((o, i) =>
+    `<button class="quiz-option" data-element="${o.e}" data-i="${i}">${o.t}</button>`
+  ).join('');
+
+  inner.innerHTML = `
+    <div class="quiz-progress">${dots}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options">${options}</div>
+  `;
+
+  inner.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const element = btn.getAttribute('data-element');
+      btn.classList.add('chosen');
+      // Score
+      quizState.scores[element] = (quizState.scores[element] || 0) + 1;
+      quizState.answers.push(element);
+      // Brief pause to show the choice, then advance
+      setTimeout(() => {
+        quizState.idx++;
+        if (quizState.idx < QUIZ.length) {
+          renderQuestion();
+        } else {
+          computeAndShowResult();
+        }
+      }, 320);
+    });
+  });
+}
+
+function computeAndShowResult() {
+  // Find dominant element. Tie-break by which appeared first/most recently? Use highest, then earliest answer.
+  const scores = quizState.scores;
+  let max = -1, winner = 'fire';
+  // Order matters for ties — prefer the element the user picked earliest among the maxed
+  const order = ['wood', 'fire', 'earth', 'metal', 'water'];
+  for (const el of order) {
+    if (scores[el] > max) { max = scores[el]; winner = el; }
+  }
+  // Secondary = next highest (excluding winner)
+  let secondMax = -1, second = null;
+  for (const el of order) {
+    if (el === winner) continue;
+    if (scores[el] > secondMax) { secondMax = scores[el]; second = el; }
+  }
+
+  // Persist
+  try {
+    localStorage.setItem('meridian_element', JSON.stringify({
+      primary: winner, secondary: second, scores, ts: Date.now()
+    }));
+  } catch (e) {}
+
+  showResult(winner, second);
+}
+
+function showResult(primary, secondary) {
+  applyQuizTheme(primary);
+  const r = ELEMENT_RESULTS[primary];
+  const inner = document.getElementById('quizInner');
+
+  const secondaryLine = (secondary && ELEMENT_RESULTS[secondary])
+    ? `<div class="result-secondary">with a current of ${ELEMENT_RESULTS[secondary].name} ${ELEMENT_RESULTS[secondary].cn}</div>`
+    : '';
+
+  inner.innerHTML = `
+    <div class="quiz-result">
+      <div class="result-cn">${r.cn}</div>
+      <div class="result-you-are">you are</div>
+      <div class="result-name">${r.name}</div>
+      <div class="result-archetype">${r.archetype}</div>
+      <div class="result-desc">${r.desc}</div>
+      ${secondaryLine}
+      <div class="result-rows">
+        <div class="result-row">
+          <div class="label">Your organs</div>
+          <div class="value">${r.organs}</div>
+        </div>
+        <div class="result-divider"></div>
+        <div class="result-row">
+          <div class="label">Your hours · ${r.hoursNote}</div>
+          <div class="value element-color">${r.hours}</div>
+        </div>
+        <div class="result-divider"></div>
+        <div class="result-row">
+          <div class="label">Watch for</div>
+          <div class="value">${r.watch}</div>
+        </div>
+        <div class="result-divider"></div>
+        <div class="result-row">
+          <div class="label">Your practice</div>
+          <div class="value" style="font-size:17px; line-height:1.55;">${r.practice}</div>
+        </div>
+      </div>
+      <div class="result-actions">
+        <button class="result-share" id="resultShareBtn">Share my element</button>
+        <button class="result-explore" id="resultExploreBtn">explore my clock  →</button>
+        <button class="result-retake" id="resultRetakeBtn">retake</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('resultShareBtn').addEventListener('click', () => generateElementCard(primary, secondary));
+  document.getElementById('resultExploreBtn').addEventListener('click', closeQuiz);
+  document.getElementById('resultRetakeBtn').addEventListener('click', openQuiz);
+}
+
+// ==================== ELEMENT SHARE CARD ====================
+async function generateElementCard(primary, secondary) {
+  showToast('Composing your element\u2026');
+  const r = ELEMENT_RESULTS[primary];
+  const el = ELEMENTS[primary];
+
+  try {
+    await Promise.all([
+      document.fonts.load('500 460px "Noto Serif SC"'),
+      document.fonts.load('500 24px "Noto Serif SC"'),
+      document.fonts.load('italic 400 96px "Cormorant Garamond"'),
+      document.fonts.load('italic 400 44px "Cormorant Garamond"'),
+      document.fonts.load('400 22px "Fraunces"'),
+    ]);
+  } catch (e) {}
+
+  const Wc = 1080, Hc = 1920;
+  const canvas = document.createElement('canvas');
+  canvas.width = Wc; canvas.height = Hc;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#0c0b11';
+  ctx.fillRect(0, 0, Wc, Hc);
+  // Element glow
+  const glow = ctx.createRadialGradient(Wc/2, Hc*0.42, 0, Wc/2, Hc*0.42, 1000);
+  glow.addColorStop(0, hexToRgba(el.color, 0.28));
+  glow.addColorStop(0.45, hexToRgba(el.color, 0.08));
+  glow.addColorStop(1, 'rgba(12,11,17,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, Wc, Hc);
+  // Vignette
+  const vig = ctx.createRadialGradient(Wc/2, Hc/2, 500, Wc/2, Hc/2, 1300);
+  vig.addColorStop(0, 'rgba(0,0,0,0)');
+  vig.addColorStop(1, 'rgba(0,0,0,0.55)');
+  ctx.fillStyle = vig;
+  ctx.fillRect(0, 0, Wc, Hc);
+
+  // Grain
+  const gc = document.createElement('canvas');
+  gc.width = 240; gc.height = 240;
+  const gx = gc.getContext('2d');
+  const idata = gx.createImageData(240, 240);
+  for (let i = 0; i < idata.data.length; i += 4) {
+    const v = Math.random() * 255;
+    idata.data[i] = idata.data[i+1] = idata.data[i+2] = v;
+    idata.data[i+3] = 16;
+  }
+  gx.putImageData(idata, 0, 0);
+  const pat = ctx.createPattern(gc, 'repeat');
+  ctx.globalCompositeOperation = 'overlay';
+  ctx.fillStyle = pat;
+  ctx.fillRect(0, 0, Wc, Hc);
+  ctx.globalCompositeOperation = 'source-over';
+
+  ctx.textAlign = 'center';
+
+  // Top label
+  ctx.font = '500 24px "Noto Serif SC", serif';
+  ctx.fillStyle = 'rgba(237,228,205,0.5)';
+  ctx.fillText('經絡  ·  MERIDIAN', Wc/2, 220);
+
+  // Big element character with glow
+  ctx.shadowColor = hexToRgba(el.color, 0.8);
+  ctx.shadowBlur = 110;
+  ctx.font = '500 460px "Noto Serif SC", serif';
+  ctx.fillStyle = el.color;
+  ctx.fillText(r.cn, Wc/2, 760);
+  ctx.shadowBlur = 0;
+
+  // "you are"
+  ctx.font = '400 26px "Fraunces", serif';
+  ctx.fillStyle = 'rgba(237,228,205,0.5)';
+  ctx.fillText('Y O U   A R E', Wc/2, 900);
+
+  // Element name
+  ctx.font = 'italic 400 130px "Cormorant Garamond", serif';
+  ctx.fillStyle = '#ede4cd';
+  ctx.fillText(r.name, Wc/2, 1030);
+
+  // Archetype
+  ctx.font = 'italic 400 56px "Cormorant Garamond", serif';
+  ctx.fillStyle = el.color;
+  ctx.fillText(r.archetype, Wc/2, 1110);
+
+  // Short tagline (first sentence of desc)
+  const firstSentence = r.desc.split('. ')[0] + '.';
+  ctx.font = 'italic 400 42px "Cormorant Garamond", serif';
+  ctx.fillStyle = 'rgba(237,228,205,0.8)';
+  wrapTextCanvas(ctx, firstSentence, Wc/2, 1260, 860, 58);
+
+  // Divider
+  ctx.strokeStyle = hexToRgba(el.color, 0.4);
+  ctx.lineWidth = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(Wc/2 - 50, 1500); ctx.lineTo(Wc/2 + 50, 1500); ctx.stroke();
+
+  // Your hours
+  ctx.font = '400 22px "Fraunces", serif';
+  ctx.fillStyle = 'rgba(237,228,205,0.5)';
+  ctx.fillText('YOUR HOURS', Wc/2, 1570);
+  ctx.font = 'italic 400 56px "Cormorant Garamond", serif';
+  ctx.fillStyle = el.color;
+  ctx.fillText(r.hours, Wc/2, 1640);
+
+  // CTA / URL at bottom
+  ctx.font = 'italic 400 38px "Cormorant Garamond", serif';
+  ctx.fillStyle = '#ede4cd';
+  ctx.fillText("what\u2019s your element?", Wc/2, 1780);
+  ctx.font = '400 22px "Fraunces", serif';
+  ctx.fillStyle = hexToRgba(el.color, 0.85);
+  ctx.fillText(SHARE_URL.toUpperCase() + '  ·  FREE', Wc/2, 1845);
+
+  canvas.toBlob(async (blob) => {
+    if (!blob) { showToast('Could not create card.'); return; }
+    const fileName = `my-element-${r.name.toLowerCase()}.png`;
+    if (navigator.canShare) {
+      const file = new File([blob], fileName, { type: 'image/png' });
+      if (navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: `I am ${r.name} ${r.cn}`,
+            text: `My TCM element is ${r.name} — ${r.archetype}. What's yours?`
+          });
+          showToast('Shared.');
+          return;
+        } catch (e) {}
+      }
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = fileName;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast('Element card saved.');
+  }, 'image/png', 0.95);
+}
+
 // ==================== ONBOARDING ====================
 const ONBOARDING = [
   {
@@ -3029,7 +3748,7 @@ const ONBOARDING = [
   },
   {
     cn: '聽',
-    html: 'This is not medicine. It is a way of <strong>listening to time</strong>. Tap any segment of the clock to learn more.'
+    html: 'This is not medicine. It is a way of <strong>listening to time</strong>. First — let\u2019s find your element.'
   }
 ];
 
@@ -3049,7 +3768,7 @@ function setOnboardCard(i) {
   const dots = document.querySelectorAll('.onboard-dot');
   dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
   const nextBtn = document.getElementById('onboardNext');
-  nextBtn.textContent = i === ONBOARDING.length - 1 ? 'Begin' : 'Continue';
+  nextBtn.textContent = i === ONBOARDING.length - 1 ? 'Find my element' : 'Continue';
   // Restart the animations for new content
   const cnEl = document.getElementById('onboardCn');
   const cardEl = document.getElementById('onboardCard');
@@ -3064,13 +3783,21 @@ function nextOnboardCard() {
   if (onboardIdx < ONBOARDING.length - 1) {
     setOnboardCard(onboardIdx + 1);
   } else {
-    closeOnboarding();
+    closeOnboarding(true);
   }
 }
 
-function closeOnboarding() {
+function closeOnboarding(launchQuiz) {
   document.getElementById('onboard').classList.remove('active');
   try { localStorage.setItem('meridian_onboarded', '1'); } catch(e) {}
+  // For first-timers, flow straight into the element quiz — the natural on-ramp.
+  if (launchQuiz) {
+    let hasElement = false;
+    try { hasElement = !!JSON.parse(localStorage.getItem('meridian_element')); } catch(e) {}
+    if (!hasElement) {
+      setTimeout(openQuiz, 700);
+    }
+  }
 }
 
 // ==================== ORGAN DETAIL PANEL ====================
@@ -3607,6 +4334,17 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('wallpaperBtn').addEventListener('click', generateWallpaper);
   document.getElementById('dayMapBtn').addEventListener('click', openDayMap);
   document.getElementById('journalBtn').addEventListener('click', openJournal);
+  document.getElementById('elementBtn').addEventListener('click', () => {
+    // If already taken, jump straight to the result; else start the quiz
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem('meridian_element')); } catch (e) {}
+    if (saved && saved.primary) {
+      document.getElementById('quiz').classList.add('active');
+      showResult(saved.primary, saved.secondary);
+    } else {
+      openQuiz();
+    }
+  });
 
   document.getElementById('daymapClose').addEventListener('click', closeDayMap);
   document.getElementById('daymapBackdrop').addEventListener('click', closeDayMap);
@@ -3681,10 +4419,20 @@ document.addEventListener('DOMContentLoaded', () => {
       closeDayMap();
       closeJournal();
       closeMovement();
+      closeQuiz();
       document.getElementById('about').classList.remove('active');
       document.getElementById('iosHelp').classList.remove('active');
     }
   });
+
+  // Reflect saved element on the aux button label
+  try {
+    const saved = JSON.parse(localStorage.getItem('meridian_element'));
+    if (saved && saved.primary && ELEMENT_RESULTS[saved.primary]) {
+      const r = ELEMENT_RESULTS[saved.primary];
+      document.getElementById('elementBtn').textContent = `${r.cn} ${r.name}`;
+    }
+  } catch (e) {}
 
   // First-time onboarding
   let onboarded = false;
